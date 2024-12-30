@@ -92,3 +92,17 @@ font-size: 0.5rem;
 .input:focus{
   box-shadow: none;
 }
+.canvasStage{
+  position: relative;
+}
+.context-menu-list{
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+}
+.context-menu-list span{
+font-size: 0.5rem;
+}

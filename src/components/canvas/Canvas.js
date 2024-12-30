@@ -3,100 +3,226 @@ import {
     FaLongArrowAltRight,
     FaPencilAlt,
     FaRegCircle,
-    FaRegSquare
+    FaRegSquare,
 } from "react-icons/fa";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { FaArrowPointer } from "react-icons/fa6";
 import {
-    Arc, Arrow, Circle,
-    Image, Layer, Line, Rect, Stage, Star, Text,
-    Transformer
+    Arc,
+    Arrow,
+    Circle,
+    Image,
+    Layer,
+    Line,
+    Rect,
+    Stage,
+    Star,
+    Text,
+    Transformer,
 } from "react-konva";
-import { generateRandomHex, randId } from "../../Utils/common";
+import { generateRandomHex, isObjectEmpty, randId } from "../../Utils/common";
 import { ACTIONS } from "../../Utils/Constants";
-import { arrowOptions, circleOptions, rectangleOptions } from "../../Utils/elementObject";
+import elementOptions from "../../Utils/elementOptions.json";
 import "./style.css";
+import { rectElemTypes } from "../../Utils/elementOptionTypes";
+import ColorCodeInput from "../ColorCodeInut/Index";
+import { BiSolidTrash } from "react-icons/bi";
 const Canvas = () => {
-    // Instagram post dimensions: 1080px by 1080px
-    const width = 512;
-    const height = 512;
+    const width = 1080 / 2;
+    const height = 1080 / 2;
     const stageRef = useRef();
     const TransformerRef = useRef();
+    const elementRef = useRef({});
     const [action, setAction] = useState(ACTIONS.SELECT);
     const [elements, setElements] = useState([]);
-    const handlePointerDown = () => { };
-    useEffect(() => {
-        console.log("elements", elements);
-    }, [elements]);
+    const [selectedElement, setSelectedElement] = useState({});
+    const [contextMenu, setcontextMenu] = useState({
+        show: false,
+        x: 0,
+        y: 0
+    })
+    const handlePointerDown = () => {
+
+    };
+    const handlePointerMove = () => {
+        const stage = stageRef.current;
+    };
+
     const onElementClick = (e) => {
         const target = e.target;
-        TransformerRef.current.nodes([target])
-    }
+        TransformerRef.current.nodes([elementRef.current[target.attrs.id]]);
+        setSelectedElement(target.attrs);
+    };
     const handleElementBtnClick = (action) => {
         // const stage = stageRef.current;
         // const { x, y } = stage.getPointerPosition();
         switch (action) {
             case ACTIONS.RECTANGLE:
-                rectangleOptions.x = (width - 50) / 2;
-                rectangleOptions.y = (height - 50) / 2;
-                rectangleOptions.width = 50;
-                rectangleOptions.height = 50;
-                rectangleOptions.fill = generateRandomHex();
-                rectangleOptions.id = uuidv4();
-                rectangleOptions.onClick = (e) => onElementClick(e)
-                setElements([...elements, { "type": "Rect", props: rectangleOptions }])
+                let newRecOptions = {};
+                newRecOptions.x = (width - 50) / 2;
+                newRecOptions.y = (height - 50) / 2;
+                newRecOptions.width = 50;
+                newRecOptions.height = 50;
+                newRecOptions.fill = generateRandomHex();
+                newRecOptions.id = uuidv4();
+                newRecOptions.onClick = (e) => onElementClick(e);
+                setElements([
+                    ...elements,
+                    {
+                        type: "Rect",
+                        props: { ...newRecOptions, ...elementOptions.rectangleOptions },
+                    },
+                ]);
                 break;
             case ACTIONS.CIRCLE:
-
-                circleOptions.x = (width - 50) / 2;
-                circleOptions.y = (height - 50) / 2;
-                circleOptions.radius = 50;
-                circleOptions.fill = generateRandomHex();
-                circleOptions.id = uuidv4();
-                circleOptions.onClick = (e) => onElementClick(e)
-                setElements([...elements, { "type": "Circle", props: circleOptions }])
+                const newCircleOptions = {};
+                newCircleOptions.x = (width - 50) / 2;
+                newCircleOptions.y = (height - 50) / 2;
+                newCircleOptions.radius = 50;
+                newCircleOptions.fill = generateRandomHex();
+                newCircleOptions.id = uuidv4();
+                newCircleOptions.onClick = (e) => onElementClick(e);
+                setElements([
+                    ...elements,
+                    {
+                        type: "Circle",
+                        props: { ...newCircleOptions, ...elementOptions.circleOptions },
+                    },
+                ]);
                 break;
             case ACTIONS.ARROW:
-                arrowOptions.x = (width - 50) / 2;
-                arrowOptions.y = (height - 50) / 2;
-                arrowOptions.fill = generateRandomHex();
-                arrowOptions.id = uuidv4();
-                arrowOptions.onClick = (e) => onElementClick(e)
-                setElements([...elements, { "type": "Arrow", props: arrowOptions }])
+                const newArrowOptions = elementOptions.arrowOptions;
+                newArrowOptions.x = (width - 50) / 2;
+                newArrowOptions.y = (height - 50) / 2;
+                newArrowOptions.fill = generateRandomHex();
+                newArrowOptions.id = uuidv4();
+                newArrowOptions.onClick = (e) => onElementClick(e);
+                setElements([
+                    ...elements,
+                    {
+                        type: "Arrow",
+                        props: { ...newArrowOptions, ...elementOptions.arrowOptions },
+                    },
+                ]);
                 break;
             default:
                 break;
         }
     };
-    const handlePointerUp = () => { };
+    const handleTransformEnd = (id) => {
+        const node = elementRef.current[id];
+        const updatedShapes = elements.map((shape) => {
+            if (shape.props.id === id && shape.type === 'Rect') {
+                console.log("shape", shape);
+                shape.props.x = node.x();
+                shape.props.y = node.y();
+                shape.props.width = node.width() * node.scaleX(); // Adjust for scaling
+                shape.props.height = node.height() * node.scaleY(); // Adjust for scaling
+            }
+            if (shape.props.id === id && shape.type === 'Circle') {
+                shape.props.x = node.x();
+                shape.props.y = node.y();
+                shape.props.radius = node.radius() * node.scaleX(); // Adjust for scaling
+            }
+            return shape;
+        });
+        setElements(() => updatedShapes);
+        node.scaleX(1); // Reset scaling
+        node.scaleY(1); // Reset scaling
+    };
+    const handlePointerUp = () => {
+        // TransformerRef.current.nodes([]);
+    };
+    const handleContextMenu = (e) => {
+        e.evt.preventDefault();
+        console.log("x,y", e.target.width() - e.target.x(), e.target.height() - e.target.y());
+        setcontextMenu({ ...contextMenu, show: true, x: Math.abs(e.target.width() - e.target.x()), y: Math.abs(e.target.height() - e.target.y()) })
+    }
     const renderDesignElements = () => {
-        return elements.map((element, index) => {
+        return elements.map((element) => {
             const { type, props } = element;
             switch (type) {
                 case "Rect":
-                    return (<Rect key={index} {...props} />
+                    return (
+                        <Rect
+                            onContextMenu={handleContextMenu}
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
                     );
                 case "Text":
-                    return (<Text key={index} {...props} />);
+                    return (
+                        <Text
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
+                    );
                 case "Circle":
-                    return (<Circle key={index} {...props} />);
+                    return (
+                        <Circle
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
+                    );
                 case "Arrow":
-                    return (<Arrow key={index} {...props} />);
+                    return (
+                        <Arrow
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
+                    );
                 case "Image":
-                    return (<Image key={index} {...props} />);
-
+                    return (
+                        <Image
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
+                    );
                 case "Star":
-                    return (<Star key={index} {...props} />);
+                    return (
+                        <Star
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
+                    );
                 case "Arc":
                     return (
-                        <Arc key={index} {...props} />
+                        <Arc
+                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            ref={(node) => (elementRef.current[element.props.id] = node)}
+                            key={element.props.id}
+                            {...props}
+                        />
                     );
-
                 default:
                     return null; // Handle unknown types gracefully
             }
         });
     };
+    const handleDeleteElement = () => {
+        // console.log(" elements.props.id ", elements);
+        // console.log(" selectedElement.id", selectedElement.id);
+        setElements(elements.filter((ele) => ele.props.id !== selectedElement.id));
+        TransformerRef.current.nodes([])
+        setSelectedElement({});
+    }
+    useEffect(() => {
+        console.log("selectedELE", selectedElement);
+        console.log("elements", elements);
+
+    }, [selectedElement])
 
     return (
         <div className="canvas">
@@ -142,48 +268,74 @@ const Canvas = () => {
                     <FaPencilAlt />
                 </button>
             </div>
-            <div className="canvasStage">
+            <div className="canvasStage"
+                onClick={() => setcontextMenu({ ...contextMenu, show: false })}
+            >
                 <Stage
                     ref={stageRef}
                     width={width}
                     height={height}
                     onPointerDown={handlePointerDown}
-                    // onPointerMove={handlePointerMove}
+                    onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
                     style={{ border: " solid 1px grey", background: "#fff" }}
                 >
                     <Layer key={`layer-}`}>
                         {renderDesignElements()}
-                        <Transformer ref={TransformerRef} />
+                        <Transformer keepRatio={false} ref={TransformerRef} />
                     </Layer>
-
                 </Stage>
-            </div>
+                {contextMenu.show && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: contextMenu.x,
+                            top: contextMenu.y
+                        }}
+                    >
+                        {/* Content of your context menu */}
+                        <div className="list-group">
+                            <button onClick={handleDeleteElement} type="button" className="context-menu-list list-group-item list-group-item-action ">
+                                <BiSolidTrash />
+                                <span>Delete</span>
+                            </button>
 
+                        </div>
+
+                    </div>
+                )}
+            </div>
             <div className="elementOptions">
-                <div className="optionsWrapper">
-                    <p className="options-heading">Position</p>
-                    <div className="position d-flex flex-row flex-wrap">
-                        <div className="  input-wrapper  ">
-                            <label className="input-label" htmlFor='x' > x</label>
-                            <input type="text" className="form-control  input" name='x' id='x' aria-describedby="helpId" />
-                        </div>
-                        <div className=" input-wrapper ">
-                            <label className="input-label" htmlFor='y' > y</label>
-                            <input type="text" className="form-control  input" name='y' id='y' aria-describedby="helpId" />
-                        </div>
-                        <div className=" input-wrapper ">
-                            <label className="input-label" htmlFor='width' > w</label>
-                            <input type="text" className="form-control  input" name='width' id='width' aria-describedby="helpId" />
-                        </div>
-                        <div className=" input-wrapper ">
-                            <label className="input-label" htmlFor='height' > h </label>
-                            <input type="text" className="form-control  input" name='height' id='height' aria-describedby="helpId" />
+                {selectedElement !== null && (
+                    <div className="optionsWrapper">
+                        <p className="options-heading">Position</p>
+                        <div className="position d-flex flex-row flex-wrap">
+                            {rectElemTypes.position.map((elemType) => {
+
+                                if (elemType.type == 'text')
+                                    return (<div className="input-wrapper  ">
+                                        <label className="input-label" htmlFor={elemType.id}>
+                                            {elemType.label}
+                                        </label>
+                                        <input
+                                            type={elemType.type}
+                                            className="form-control  input"
+                                            value={selectedElement[elemType.id]}
+                                            name={elemType.id}
+                                            id={elemType.id}
+                                            aria-describedby="helpId"
+                                        />
+                                    </div>)
+                                if (elemType.type === 'color') return <ColorCodeInput id={elemType.id} label={elemType.label} value={selectedElement[elemType.id]} />
+                            }
+                            )}
+
+
                         </div>
                     </div>
-
-                </div>
+                )}
             </div>
+
         </div>
     );
 };
