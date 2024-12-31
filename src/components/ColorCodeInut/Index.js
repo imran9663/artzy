@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react'
 import './style.css'
 const ColorCodeInput = ({ label = "col", id, value }) => {
-    useEffect(() => {
-        console.log("color props", label, value, id);
 
-    }, [])
 
     return (
         <div className="customColorInput">

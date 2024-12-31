@@ -26,7 +26,7 @@ import elementOptions from "../../Utils/elementOptions.json";
 import "./style.css";
 import { rectElemTypes } from "../../Utils/elementOptionTypes";
 import ColorCodeInput from "../ColorCodeInut/Index";
-import { BiSolidTrash } from "react-icons/bi";
+import { BiDuplicate, BiSolidTrash } from "react-icons/bi";
 const Canvas = () => {
     const width = 1080 / 2;
     const height = 1080 / 2;
@@ -39,9 +39,9 @@ const Canvas = () => {
     const [contextMenu, setcontextMenu] = useState({
         show: false,
         x: 0,
-        y: 0
-    })
-    const handlePointerDown = () => {
+        y: 0,
+    });
+    const handlePointerDown = (e) => {
 
     };
     const handlePointerMove = () => {
@@ -112,32 +112,50 @@ const Canvas = () => {
     const handleTransformEnd = (id) => {
         const node = elementRef.current[id];
         const updatedShapes = elements.map((shape) => {
-            if (shape.props.id === id && shape.type === 'Rect') {
-                console.log("shape", shape);
+            if (shape.props.id === id) {
                 shape.props.x = node.x();
                 shape.props.y = node.y();
-                shape.props.width = node.width() * node.scaleX(); // Adjust for scaling
-                shape.props.height = node.height() * node.scaleY(); // Adjust for scaling
-            }
-            if (shape.props.id === id && shape.type === 'Circle') {
-                shape.props.x = node.x();
-                shape.props.y = node.y();
-                shape.props.radius = node.radius() * node.scaleX(); // Adjust for scaling
+                switch (shape.type) {
+                    case "Rect":
+                        shape.props.width = node.width() * node.scaleX(); // Adjust for scaling
+                        shape.props.height = node.height() * node.scaleY(); // Adjust for scaling
+                        break;
+                    case 'Circle':
+                        shape.props.radius = node.radius() * node.scaleX();
+                    default:
+                        break;
+                }
             }
             return shape;
         });
+        // console.log("updatedShapes", updatedShapes);
         setElements(() => updatedShapes);
         node.scaleX(1); // Reset scaling
         node.scaleY(1); // Reset scaling
     };
+    const handleDragMove = (id) => {
+        const node = elementRef.current[id];
+        const updatedShapes = elements.map((shape) => {
+            if (shape.props.id === id) {
+                shape.props.x = node.x();
+                shape.props.y = node.y();
+            }
+            return shape;
+        });
+        setElements(() => updatedShapes);
+    };
     const handlePointerUp = () => {
-        // TransformerRef.current.nodes([]);
+        TransformerRef.current.nodes([]);
     };
     const handleContextMenu = (e) => {
         e.evt.preventDefault();
-        console.log("x,y", e.target.width() - e.target.x(), e.target.height() - e.target.y());
-        setcontextMenu({ ...contextMenu, show: true, x: Math.abs(e.target.width() - e.target.x()), y: Math.abs(e.target.height() - e.target.y()) })
-    }
+        setcontextMenu({
+            ...contextMenu,
+            show: true,
+            x: Math.abs(e.target.width() - e.target.x()),
+            y: Math.abs(e.target.height() - e.target.y()),
+        });
+    };
     const renderDesignElements = () => {
         return elements.map((element) => {
             const { type, props } = element;
@@ -145,8 +163,11 @@ const Canvas = () => {
                 case "Rect":
                     return (
                         <Rect
+                            onTransform={() => handleTransformEnd(element.props.id)}
+                            // onDragEnd={() => handleDragMove(element.props.id)}
+                            onDragMove={() => handleDragMove(element.props.id)}
                             onContextMenu={handleContextMenu}
-                            onTransformEnd={() => handleTransformEnd(element.props.id)}
+
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -156,6 +177,7 @@ const Canvas = () => {
                     return (
                         <Text
                             onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            onContextMenu={handleContextMenu}
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -165,6 +187,7 @@ const Canvas = () => {
                     return (
                         <Circle
                             onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            onContextMenu={handleContextMenu}
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -174,6 +197,7 @@ const Canvas = () => {
                     return (
                         <Arrow
                             onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            onContextMenu={handleContextMenu}
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -183,6 +207,7 @@ const Canvas = () => {
                     return (
                         <Image
                             onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            onContextMenu={handleContextMenu}
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -192,6 +217,7 @@ const Canvas = () => {
                     return (
                         <Star
                             onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            onContextMenu={handleContextMenu}
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -201,6 +227,7 @@ const Canvas = () => {
                     return (
                         <Arc
                             onTransformEnd={() => handleTransformEnd(element.props.id)}
+                            onContextMenu={handleContextMenu}
                             ref={(node) => (elementRef.current[element.props.id] = node)}
                             key={element.props.id}
                             {...props}
@@ -215,14 +242,43 @@ const Canvas = () => {
         // console.log(" elements.props.id ", elements);
         // console.log(" selectedElement.id", selectedElement.id);
         setElements(elements.filter((ele) => ele.props.id !== selectedElement.id));
-        TransformerRef.current.nodes([])
+        TransformerRef.current.nodes([]);
         setSelectedElement({});
-    }
-    useEffect(() => {
-        console.log("selectedELE", selectedElement);
-        console.log("elements", elements);
+    };
+    const handleDuplicate = () => {
+        // const eleM = elements.filter((ele) => ele.props.id === selectedElement.id)
+        // eleM[0].props.id = uuidv4();
+        // const updatedELE = [...elements, eleM[0]]
+        // console.log("eleM[0]", eleM[0]);
+        // console.log("updatedELE", updatedELE);
+        // setElements(() => [...elements, eleM[0]])
+        const eleM = elements.find((ele) => ele.props.id === selectedElement.id);
 
-    }, [selectedElement])
+        if (eleM) {
+            // Create a duplicate object with a new id
+            const duplicateElement = {
+                ...eleM,
+                props: {
+                    ...eleM.props,
+                    id: uuidv4(),
+                },
+            };
+
+            // Update the elements array with the new element
+            const updatedElements = [...elements, duplicateElement];
+            // Update the state
+            setElements(updatedElements);
+        }
+
+    }
+    const handleClickOnCanvasStage = () => {
+        setcontextMenu({ ...contextMenu, show: false });
+    };
+
+    // useEffect(() => {
+    //     // console.log("selectedELE", selectedElement);
+    //     console.log("TransformerRef", TransformerRef);
+    // }, [TransformerRef]);
 
     return (
         <div className="canvas">
@@ -269,13 +325,12 @@ const Canvas = () => {
                 </button>
             </div>
             <div className="canvasStage"
-                onClick={() => setcontextMenu({ ...contextMenu, show: false })}
-            >
+                onClick={handleClickOnCanvasStage}>
                 <Stage
                     ref={stageRef}
-                    width={width}
                     height={height}
                     onPointerDown={handlePointerDown}
+                    width={width}
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
                     style={{ border: " solid 1px grey", background: "#fff" }}
@@ -288,20 +343,30 @@ const Canvas = () => {
                 {contextMenu.show && (
                     <div
                         style={{
-                            position: 'absolute',
+                            position: "absolute",
                             left: contextMenu.x,
-                            top: contextMenu.y
+                            top: contextMenu.y,
                         }}
                     >
                         {/* Content of your context menu */}
                         <div className="list-group">
-                            <button onClick={handleDeleteElement} type="button" className="context-menu-list list-group-item list-group-item-action ">
+                            <button
+                                onClick={handleDeleteElement}
+                                type="button"
+                                className="context-menu-list list-group-item list-group-item-action "
+                            >
                                 <BiSolidTrash />
                                 <span>Delete</span>
                             </button>
-
+                            <button
+                                onClick={handleDuplicate}
+                                type="button"
+                                className="context-menu-list list-group-item list-group-item-action "
+                            >
+                                <BiDuplicate />
+                                <span>Duplicate</span>
+                            </button>
                         </div>
-
                     </div>
                 )}
             </div>
@@ -311,31 +376,35 @@ const Canvas = () => {
                         <p className="options-heading">Position</p>
                         <div className="position d-flex flex-row flex-wrap">
                             {rectElemTypes.position.map((elemType) => {
-
-                                if (elemType.type == 'text')
-                                    return (<div className="input-wrapper  ">
-                                        <label className="input-label" htmlFor={elemType.id}>
-                                            {elemType.label}
-                                        </label>
-                                        <input
-                                            type={elemType.type}
-                                            className="form-control  input"
-                                            value={selectedElement[elemType.id]}
-                                            name={elemType.id}
+                                if (elemType.type == "text")
+                                    return (
+                                        <div className="input-wrapper  ">
+                                            <label className="input-label" htmlFor={elemType.id}>
+                                                {elemType.label}
+                                            </label>
+                                            <input
+                                                type={elemType.type}
+                                                className="form-control  input"
+                                                value={selectedElement[elemType.id]}
+                                                name={elemType.id}
+                                                id={elemType.id}
+                                                aria-describedby="helpId"
+                                            />
+                                        </div>
+                                    );
+                                if (elemType.type === "color")
+                                    return (
+                                        <ColorCodeInput
                                             id={elemType.id}
-                                            aria-describedby="helpId"
+                                            label={elemType.label}
+                                            value={selectedElement[elemType.id]}
                                         />
-                                    </div>)
-                                if (elemType.type === 'color') return <ColorCodeInput id={elemType.id} label={elemType.label} value={selectedElement[elemType.id]} />
-                            }
-                            )}
-
-
+                                    );
+                            })}
                         </div>
                     </div>
                 )}
             </div>
-
         </div>
     );
 };
