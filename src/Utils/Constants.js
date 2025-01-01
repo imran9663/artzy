@@ -5,3 +5,7 @@ export const ACTIONS = {
     PENCIL: "PENCIL",
     ARROW: "ARROW"
 }
+export const SHAPES = {
+    rect: "rect",
+    circle: "circle",
+}
