@@ -45,18 +45,6 @@ const Layers = ({ canvas }) => {
         if (!selectedLayer) return;
         const object = canvas.getObjects().find((obj) => obj.id === selectedLayer.id)
         if (!object) return;
-        // setLayerOpacityMap((prevMap) => {
-        //     const newMap = { ...prevMap }
-        //     if (!newMap[selectedLayer]) {
-        //         console.log();
-
-        //         newMap[selectedLayer] = object.opacity;
-
-        //     }
-        //     object.opacity = object.opacity === 0 ? newMap[selectedLayer] : 0;
-        //     canvas.renderAll();
-        //     return newMap
-        // })
         if (object.opacity === 0) {
             object.opacity = object.prevOpacity || 1;
             object.prevOpacity = undefined;

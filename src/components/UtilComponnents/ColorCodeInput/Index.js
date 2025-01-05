@@ -2,32 +2,31 @@ import React, { useEffect, useState } from 'react';
 import ColorPicker, { useColorPicker } from 'react-best-gradient-color-picker';
 import { Tab, Tabs } from 'react-bootstrap';
 import { BiX } from 'react-icons/bi';
-import { hexToRgbaWithAlpha, isObjectEmpty, rgbaToHex } from '../../../Utils/common';
+import { hexToRgbaWithAlpha, isObjectEmpty, rgbOrRgbaToHex } from '../../../Utils/common';
 import { COLOR_TYPE } from '../../../Utils/Constants';
 import './style.css';
 const ColorCodeInput = ({ label = "color", id, value, handleChange, showGradientPanel = false }) => {
     const [showPickerPopup, setShowPickerPopup] = useState(false);
-    const [color, setcolor] = useState(value)
+    const defaultSolidColor = value;
+    const [color, setcolor] = useState(value);
     const [key, setKey] = useState(COLOR_TYPE.solid);
     const { getGradientObject } = useColorPicker(color, setcolor);
     useEffect(() => {
         let gradientObject = getGradientObject();
         if (key === COLOR_TYPE.gradient && !isObjectEmpty(gradientObject) && gradientObject.colors.length < 2) {
-            console.log("gradientObject", gradientObject);
             gradientObject.colors.push({ value: "#ffffff" })
             handleChange(COLOR_TYPE.gradient, gradientObject)
         }
         if (key === COLOR_TYPE.gradient && !isObjectEmpty(gradientObject) && gradientObject.colors.length > 1) {
             handleChange(COLOR_TYPE.gradient, gradientObject)
         }
-
     }, [color])
 
     useEffect(() => {
         if (key === COLOR_TYPE.gradient) {
             setcolor(`linear-gradient(90deg, ${hexToRgbaWithAlpha(value, 1)} 0%, rgba(255,255,255,1) 100%)`)
         } else {
-            setcolor(value)
+            setcolor(defaultSolidColor);
         }
 
     }, [key])
@@ -35,7 +34,7 @@ const ColorCodeInput = ({ label = "color", id, value, handleChange, showGradient
     const handleColorChange = (newColor) => {
         if (key === COLOR_TYPE.solid) {
             setcolor(newColor);
-            handleChange(COLOR_TYPE.solid, rgbaToHex(newColor))
+            handleChange(COLOR_TYPE.solid, rgbOrRgbaToHex(newColor))
         } else {
             setcolor(newColor);
         }

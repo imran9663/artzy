@@ -8,7 +8,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { generateRandomHex } from "../../Utils/common";
 import { ACTIONS } from "../../Utils/Constants";
-import elementOptions from "../../Utils/elementOptions.json";
+import elementOptions from "../../Utils/elementOptions";
 import Settings from '../Settings/Setting';
 import "./style.css";
 import { clearGuideLines, handleObjectMoving } from '../../helpers/snappingHelper';
@@ -32,9 +32,7 @@ const MainCanvas = () => {
     const [shapeOptionsTabKey, setShapeOptionsTabKey] = useState('styles');
     const [guideLines, setGuideLines] = useState([])
     const [localAssets, setLocalAssets] = useState([]);
-    useEffect(() => {
-        console.log('localAssets', localAssets)
-    }, [localAssets])
+
 
     useEffect(() => {
         if (canvasRef.current) {
@@ -101,12 +99,7 @@ const MainCanvas = () => {
         setSelectedElement({});
     };
     const handleDuplicate = () => {
-        // const eleM = elements.filter((ele) => ele.props.id === selectedElement.id)
-        // eleM[0].props.id = uuidv4();
-        // const updatedELE = [...elements, eleM[0]]
-        // console.log("eleM[0]", eleM[0]);
-        // console.log("updatedELE", updatedELE);
-        // setElements(() => [...elements, eleM[0]])
+
         const eleM = elements.find((ele) => ele.props.id === selectedElement.id);
 
         if (eleM) {
@@ -132,14 +125,11 @@ const MainCanvas = () => {
         setShowImageOptions(!showImageOptions)
     }
     const handleChangeInput = (e) => {
-        console.log("e", e.target.files[0]);
         const file = e.target.files[0];
         const url = URL.createObjectURL(file);
         setLocalAssets([...localAssets, { src: url, name: file.name }])
     }
     function handleImageToCanvas (imageUrl) {
-        console.log("imageUrl", imageUrl);
-
         // Ensure the canvas object is initialized
         if (!canvas || !imageUrl) {
             console.error("Canvas or Image URL is missing.");

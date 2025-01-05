@@ -99,7 +99,6 @@ const Setting = ({ canvas }) => {
         }
     };
     const handleColorChange = (type, value) => {
-
         if (type === COLOR_TYPE.solid) {
             setColor(value);
             if (selectedObject) {
@@ -108,11 +107,9 @@ const Setting = ({ canvas }) => {
             }
         }
         if (type === COLOR_TYPE.gradient) {
-            setColor(value);
+            // setColor(value);
             if (selectedObject) {
-
                 const gradient_fill = new Gradient(convertPaletteToFabricGradientV2(selectedObject, value));
-                console.log("gradient_fill", gradient_fill);
                 selectedObject.set({ fill: gradient_fill });
                 canvas.renderAll();
             }
