@@ -1,0 +1,192 @@
+.canvas {
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../../Assets/Images/diamond-sunset.svg");
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.elements-wrapper{
+min-height: 85%;
+display: flex;
+flex-direction: row;
+}
+.elements {
+ padding: 0.5rem 0 ;
+  width: 3rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  border-radius: 5px;
+  background-color: aliceblue;
+  margin: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem ;
+}
+.elementBtn{
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.elementBtn:hover{
+  background-color: antiquewhite;
+  cursor: pointer;
+}
+.elementBtnSelected{
+    background-color: burlywood;
+}
+
+
+/* .elementOptions {
+  width: 15rem;
+  min-height: 85%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 5px;
+  background-color: aliceblue;
+  margin: 0 0.5rem;
+} */
+.options-heading{
+  font-size: 0.8rem;
+ margin-left: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.position{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem ;
+
+}
+/* .input-label{
+font-size: 0.8rem;
+}
+.input-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap:8px; 
+  margin-bottom: 0.5rem;
+  font-size: 0.5rem;
+}
+
+.input{
+height: 1.5rem;
+font-size: 0.5rem;
+}
+.input:focus{
+  box-shadow: none;
+} */
+.canvasStage{
+  position: relative;
+}
+.context-menu-list{
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+}
+.context-menu-list span{
+font-size: 0.5rem;
+}
+canvas{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+/* ===========================shape options Styles=============================== */
+.settingsPanel {
+  width: 15rem;
+  min-height: 85%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 5px;
+  margin: 0 0.5rem;
+  
+}
+
+.shapeOptionsTabs{
+padding:0 2.5rem 0.5rem  2.5rem ;
+border-bottom: 1px solid #9e9e9e !important;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+border: none;
+}
+.shapeOptionsTabs li button{
+  border: none !important;
+  padding: 0.25rem;
+  font-size: 0.5rem !important;
+  color: #fff;
+}
+.shapeOptionsTabs li button:hover{
+  color: #fff !important;
+}
+.shapeOptionsTabs li .active{
+  border: none !important;
+  padding: 0.25rem;
+  font-size: 0.5rem !important;
+  font-weight: 600;
+  color:#fff !important;
+  background-color: transparent  !important;
+  border-bottom: solid 2px #ffb703 !important;
+}
+/* ===================================Image Options Styles ===================================== */
+.imageOptionsCard{
+  min-width: 15rem;
+  max-width: 15rem;
+} 
+.imageOptionsTabs{
+padding:0 2.5rem 0.5rem  2.5rem ;
+border-bottom: 1px solid #e2e2e2 !important;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+border: none;
+}
+.imageOptionsTabs li button{
+  border: none !important;
+  padding: 0.25rem;
+  font-size: 0.5rem !important;
+  color: black;
+}
+.imageOptionsTabs li button:hover{
+  color: black !important;
+}
+.imageOptionsTabs li .active{
+  border: none !important;
+  padding: 0.25rem;
+  font-size: 0.5rem !important;
+  font-weight: 600;
+  border-bottom: solid 2px #ffb703 !important;
+}
+.thumbnail{
+      width: 5rem;
+    /* height: 10%; */
+    object-fit: cover;
+    margin: 0.5rem;
+   
+  
+}

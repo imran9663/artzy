@@ -1,4 +1,30 @@
 body{
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
+  
+}
+.canvas-container{
+    width: 100vw;
+    height: 100vh;
+      background: #e2e2e2 !important;
+    display: flex;
+    justify-content: center;
+align-items: center;    
+}
+
+.accent-color{
+    color:#ffb703
+}
+.accent-bg{
+    background-color: #ffb703;
+}
+.fs-halfRem{
+font-size: 0.5rem;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.border-square{
+    border-radius: unset !important;
 }

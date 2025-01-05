@@ -1,0 +1,32 @@
+.input-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap:8px; 
+  margin-bottom: 0.5rem;
+  font-size: 0.5rem;
+padding: 0.25rem 0;
+}
+.input-label {
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+.input {
+  height: 1.5rem;
+  font-size: 0.5rem;
+  border: none;
+  background-color: transparent;
+  color: #ffffff;
+  border-bottom: solid 1px #e3e3e3;
+  width: 3.5rem;
+  text-align: center;
+  padding: 0.25rem;
+  border-radius: unset;
+}
+.input:focus {
+  background: transparent;
+  box-shadow: none;
+  color: #ffffff;
+  border-bottom: solid 1px #e3e3e3;
+}
