@@ -9,3 +9,7 @@ export const SHAPES = {
     rect: "rect",
     circle: "circle",
 }
+export const COLOR_TYPE = {
+    solid: 'solid',
+    gradient: 'gradient'
+}

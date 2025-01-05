@@ -19,3 +19,12 @@ align-items: center;
 .accent-bg{
     background-color: #ffb703;
 }
+.fs-halfRem{
+font-size: 0.5rem;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.border-square{
+    border-radius: unset !important;
+}

@@ -1,0 +1,61 @@
+
+
+.customColorInput {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    border-radius: 5px;
+    position: relative;
+}
+
+.color-label{
+    margin-right: 16px;
+    background: transparent;
+}
+.color-input-btn{
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 2px solid #e2e2e2;
+  cursor: pointer;
+}
+.color-popover{
+     /* border-radius: 1rem !important; */
+    min-width: 13rem;
+    width: 13rem;
+   
+    position: absolute;
+    top: 3rem;
+    left: 0rem;
+    z-index: 999;
+    box-shadow: #ffffff12 0px 1px 2px, #ffffff12 0px 2px 4px, #ffffff12 0px 4px 8px, #ffffff12 0px 8px 16px, #ffffff12 0px 16px 32px, #e3e3e312 0px 32px 64px;
+}
+
+.color-popover-tabs{
+padding:0 2.5rem 0.5rem  2.5rem ;
+border-bottom: 1px solid #9e9e9e !important;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+border: none;
+}
+.color-popover-tabs li button{
+  border: none !important;
+  padding: 0.25rem;
+  font-size: 0.5rem !important;
+  color: #fff;
+}
+.color-popover-tabs li button:hover{
+  color: #fff !important;
+}
+.color-popover-tabs li .active{
+  border: none !important;
+  padding: 0.25rem;
+  font-size: 0.5rem !important;
+  font-weight: 600;
+  color:#fff !important;
+  background-color: transparent  !important;
+  border-bottom: solid 2px #ffb703 !important;
+}
