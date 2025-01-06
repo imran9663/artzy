@@ -15,10 +15,10 @@ const ColorCodeInput = ({ label = "color", id, value, handleChange, showGradient
         let gradientObject = getGradientObject();
         if (key === COLOR_TYPE.gradient && !isObjectEmpty(gradientObject) && gradientObject.colors.length < 2) {
             gradientObject.colors.push({ value: "#ffffff" })
-            handleChange(COLOR_TYPE.gradient, gradientObject)
+            handleChange(id, COLOR_TYPE.gradient, gradientObject)
         }
         if (key === COLOR_TYPE.gradient && !isObjectEmpty(gradientObject) && gradientObject.colors.length > 1) {
-            handleChange(COLOR_TYPE.gradient, gradientObject)
+            handleChange(id, COLOR_TYPE.gradient, gradientObject)
         }
     }, [color])
 
@@ -34,7 +34,7 @@ const ColorCodeInput = ({ label = "color", id, value, handleChange, showGradient
     const handleColorChange = (newColor) => {
         if (key === COLOR_TYPE.solid) {
             setcolor(newColor);
-            handleChange(COLOR_TYPE.solid, rgbOrRgbaToHex(newColor))
+            handleChange(id, COLOR_TYPE.solid, rgbOrRgbaToHex(newColor))
         } else {
             setcolor(newColor);
         }
@@ -42,9 +42,9 @@ const ColorCodeInput = ({ label = "color", id, value, handleChange, showGradient
     }
     return (
         <div className="customColorInput mt-3">
-            <div className="w-100 d-flex flex-row justify-content-start align-items-center gap-1">
+            <div className="w-100 d-flex flex-row justify-content-around align-items-center gap-1">
                 <label htmlFor="colorCodePreview" className="input-label color-label text-light">{label}</label>
-                {key === COLOR_TYPE.solid && <input type="text" onChange={(e) => handleChange(COLOR_TYPE.solid, e.target.value)} className="input " value={color} />}
+                {key === COLOR_TYPE.solid && <input type="text" onChange={(e) => handleChange(id, COLOR_TYPE.solid, e.target.value)} className="input " value={color} />}
                 <button onClick={() => setShowPickerPopup(!showPickerPopup)} style={{ backgroundColor: value }} className="color-input-btn"></button>
             </div>
 
@@ -77,7 +77,7 @@ const ColorCodeInput = ({ label = "color", id, value, handleChange, showGradient
                                     onChange={handleColorChange} />
                                 <div className="d-flex flex-row justify-content-center  mt-3 gap-2 ">
                                     <label className='text-white' htmlFor="hexCode">HEX</label>
-                                    <input type="text" name='hexCode' onChange={(e) => handleChange(e.target.value)} className=" w-75 bg-dark text-light border border-white rounded-3  px-3" value={value} />
+                                    <input type="text" name='hexCode' onChange={(e) => handleChange(id, COLOR_TYPE.solid, e.target.value)} className=" w-75 bg-dark text-light border border-white rounded-3  px-3" value={value} />
                                 </div>
                             </div>
 

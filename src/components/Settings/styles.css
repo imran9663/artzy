@@ -2,8 +2,45 @@
   width: 100%;
   height: auto;
   min-height: 10rem;
-  padding: 1rem;
+  padding: 1rem 0;
 }
+.optionsWrapper .accordion{
+  background-color: transparent;
+}
+.optionsWrapper .accordion-body{
+  padding: 0.25rem 0;
+}
+.optionsWrapper .accordion .accordion-item{
+  background-color: transparent;
+  border: unset;
+  border-radius: unset;
+  border-bottom: 1px solid #454545;
+}
+.optionsWrapper .accordion .accordion-item .accordion-button{
+  background: transparent;
+  color: #929292;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  border: none;
+}
+ .accordion-button:hover, .accordion-button:focus-visible,.accordion-button:focus{
+  border: unset;
+  box-shadow: none;
+}
+.optionsWrapper .accordion .accordion-item .accordion-button::after{
+  background-image: url('../../Assets/Icons/cheveron-down.svg');
+}
+.accordion-icon-color{
+  color: red;
+}
+.options-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  padding: 0 1rem;
+}
+
 /* .input-wrapper{
   display: flex;
   flex-direction: row;
@@ -35,3 +72,15 @@
   color: #ffffff;
   border-bottom: solid 1px #e3e3e3;
 } */
+ .dd-toggle-btn::after{
+  display: none;
+ }
+ .dd-toggle-btn:hover{
+  background: inherit;
+ }
+ .dd-item, .dd-item:hover{
+  text-align: center;
+  color: #ffffff;
+  font-size: 3rem;
+  line-height: 1rem;
+ }

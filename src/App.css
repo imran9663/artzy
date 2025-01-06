@@ -1,15 +1,17 @@
 body{
     box-sizing: border-box;
     margin: 0;
-    padding: 0;
+    padding: 0;font-family: "Montserrat", serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
   
 }
 .canvas-container{
-    width: 100vw;
-    height: 100vh;
-      background: #e2e2e2 !important;
-    display: flex;
-    justify-content: center;
+width: 100vw;
+height: 100vh;
+background: #e2e2e2 !important;
+display: flex;
+justify-content: center;
 align-items: center;    
 }
 
@@ -27,4 +29,7 @@ font-size: 0.5rem;
 }
 .border-square{
     border-radius: unset !important;
+}
+.font-dark-bg{
+   color: #929292 !important;
 }

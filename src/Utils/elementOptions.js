@@ -86,3 +86,11 @@ export const rectOptions = {
 };
 
 
+export const elementStylesWhenSelected = {
+  borderColor: "#ffb703",
+  cornerColor: "#ffb703",
+  cornerStrokeColor: "#ffb703",
+  cornerSize: 10,
+  cornerStyle: "circle",
+  transparentCorners: false,
+}
