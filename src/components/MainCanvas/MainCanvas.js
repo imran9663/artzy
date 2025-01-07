@@ -8,12 +8,13 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { generateRandomHex } from "../../Utils/common";
 import { ACTIONS } from "../../Utils/Constants";
-import elementOptions from "../../Utils/elementOptions";
+import elementOptions, { elementStylesWhenSelected } from "../../Utils/elementOptions";
 import Settings from '../Settings/Setting';
 import "./style.css";
 import { clearGuideLines, handleObjectMoving } from '../../helpers/snappingHelper';
 import Layers from '../Layers/Layers';
 import { Form, Tab, Tabs } from 'react-bootstrap';
+import logo from '../../Assets/Images/android-icon-72x72.png'
 const MainCanvas = () => {
     const width = 1080 / 2;
     const height = 1080 / 2;
@@ -37,7 +38,7 @@ const MainCanvas = () => {
     useEffect(() => {
         if (canvasRef.current) {
             const initCanvas = new Canvas(canvasRef.current, {
-                width, height
+                width, height,
             });
 
             initCanvas.backgroundColor = "#fff";
@@ -49,6 +50,16 @@ const MainCanvas = () => {
             initCanvas.on('object:modified', () => {
                 clearGuideLines(initCanvas, guideLines, setGuideLines)
             })
+            // initCanvas.on('mouse:wheel', function (opt) {
+            //     var delta = opt.e.deltaY;
+            //     var zoom = initCanvas.getZoom();
+            //     zoom *= 0.999 ** delta;
+            //     if (zoom > 20) zoom = 20;
+            //     if (zoom < 0.01) zoom = 0.01;
+            //     initCanvas.setZoom(zoom);
+            //     opt.e.preventDefault();
+            //     opt.e.stopPropagation();
+            // })
             return () => {
                 initCanvas.dispose()
             }
@@ -67,7 +78,10 @@ const MainCanvas = () => {
                         left: (height - 50) / 2,
                         width: 50,
                         height: 50,
-                        fill: generateRandomHex()
+                        strokeWidth: 0,
+                        strokeUniform: true,
+                        fill: generateRandomHex(),
+                        ...elementStylesWhenSelected
                     })
                     canvas.add(newRect)
                     canvas.setActiveObject(newRect)
@@ -77,11 +91,11 @@ const MainCanvas = () => {
                         top: (width - 50) / 2,
                         left: (height - 50) / 2,
                         radius: 50,
-                        fill: generateRandomHex()
+                        fill: generateRandomHex(),
+                        ...elementStylesWhenSelected
                     });
                     canvas.add(newCircleOptions)
                     canvas.setActiveObject(newCircleOptions)
-
                     break;
                 default:
                     break;
@@ -99,9 +113,7 @@ const MainCanvas = () => {
         setSelectedElement({});
     };
     const handleDuplicate = () => {
-
         const eleM = elements.find((ele) => ele.props.id === selectedElement.id);
-
         if (eleM) {
             // Create a duplicate object with a new id
             const duplicateElement = {
@@ -160,73 +172,79 @@ const MainCanvas = () => {
         }
     }
     return (
+        <>
+
+
         <div className="canvas">
-            <div className="elements-wrapper">
-                <div className="elements">
+                <div className="d-flex flex-column h-100 ">
+                    <img src={logo} alt="" className="img-fluid mr-2" />
+                    <div className="elements-wrapper">
+                        <div className="elements">
+                            <button
+                                id={ACTIONS.RECTANGLE}
+                                onClick={() => handleElementBtnClick(ACTIONS.RECTANGLE)}
+                                className={`elementBtn ${action === ACTIONS.RECTANGLE && "elementBtnSelected"
+                                    }`}
+                            >
+                                <FaRegSquare />
+                            </button>
+                            <button
+                                id={ACTIONS.CIRCLE}
+                                onClick={() => handleElementBtnClick(ACTIONS.CIRCLE)}
+                                className={`elementBtn ${action === ACTIONS.CIRCLE && "elementBtnSelected"}`}
+                            >
+                                <FaRegCircle />
+                            </button>
+                            <button
+                                id={'IMAGE'}
+                                onClick={handleImageOptions}
+                                className={`elementBtn`}
+                            >
+                                <BiImageAdd />
+                            </button>
 
-                    <button
-                        id={ACTIONS.RECTANGLE}
-                        onClick={() => handleElementBtnClick(ACTIONS.RECTANGLE)}
-                        className={`elementBtn ${action === ACTIONS.RECTANGLE && "elementBtnSelected"
-                            }`}
-                    >
-                        <FaRegSquare />
-                    </button>
-                    <button
-                        id={ACTIONS.CIRCLE}
-                        onClick={() => handleElementBtnClick(ACTIONS.CIRCLE)}
-                        className={`elementBtn ${action === ACTIONS.CIRCLE && "elementBtnSelected"}`}
-                    >
-                        <FaRegCircle />
-                    </button>
-                    <button
-                        id={'IMAGE'}
-                        onClick={handleImageOptions}
-                        className={`elementBtn`}
-                    >
-                        <BiImageAdd />
-                    </button>
-
-                </div>
-                {showImageOptions && <div className="card imageOptionsCard ">
-                    <Tabs
-                        id="controlled-tab-example"
-                        activeKey={imageOptionsTabKey}
-                        onSelect={(k) => setImageOptionsTabKey(k)}
-                        className="px-3 imageOptionsTabs"
-                    >
-                        <Tab eventKey="local" title="Local">
-                            <div className="local-uploads d-flex flex-column ">
-                                <Form.Group controlId="formFileSm" className="p-3 ">
-                                    <Form.Control onChange={handleChangeInput} type="file" accept=".png,.jpg.jpeg.webp.svg" size="sm" />
-                                </Form.Group>
-                                <div className="localUploads px-3 d-flex flex-column">
-                                    <p className="text-left"> My Uploads</p>
-                                    <div className="d-flex flex-row flex-wrap justify-content-start gap-1">
-                                        {localAssets.map(image =>
-                                            <button onClick={() => handleImageToCanvas(image.src)} className="btn p-0">
-                                                <img
-                                                    src={image.src}
-                                                    className="rounded thumbnail"
-                                                    alt=""
-                                                />
-                                            </button>
-                                        )}
+                        </div>
+                        {showImageOptions && <div className="card imageOptionsCard ">
+                            <Tabs
+                                id="controlled-tab-example"
+                                activeKey={imageOptionsTabKey}
+                                onSelect={(k) => setImageOptionsTabKey(k)}
+                                className="px-3 imageOptionsTabs"
+                            >
+                                <Tab eventKey="local" title="Local">
+                                    <div className="local-uploads d-flex flex-column ">
+                                        <Form.Group controlId="formFileSm" className="p-3 ">
+                                            <Form.Control onChange={handleChangeInput} type="file" accept=".png,.jpg.jpeg.webp.svg" size="sm" />
+                                        </Form.Group>
+                                        <div className="localUploads px-3 d-flex flex-column">
+                                            <p className="text-left"> My Uploads</p>
+                                            <div className="d-flex flex-row flex-wrap justify-content-start gap-1">
+                                                {localAssets.map(image =>
+                                                    <button onClick={() => handleImageToCanvas(image.src)} className="btn p-0">
+                                                        <img
+                                                            src={image.src}
+                                                            className="rounded thumbnail"
+                                                            alt=""
+                                                        />
+                                                    </button>
+                                                )}
 
 
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                        </Tab>
-                        <Tab eventKey="online" title="Online">
-                            Tab content for Profile
-                        </Tab>
+                                </Tab>
+                                <Tab eventKey="online" title="Online">
+                                    Tab content for Profile
+                                </Tab>
 
-                    </Tabs>
+                            </Tabs>
 
-                </div>}
-            </div>
+                        </div>}
+                    </div>
+</div>
+           
 
 
             <div className="canvasStage"
@@ -277,7 +295,8 @@ const MainCanvas = () => {
                     </Tab>
                 </Tabs>
             </div>
-        </div>
+            </div>
+        </>
     );
 };
 

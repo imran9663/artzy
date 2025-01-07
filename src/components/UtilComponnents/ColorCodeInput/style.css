@@ -7,6 +7,7 @@
     flex-wrap: wrap;
     border-radius: 5px;
     position: relative;
+    width: 100%;
 }
 
 .color-label{
@@ -19,6 +20,7 @@
   border-radius: 50%;
   border: 2px solid #e2e2e2;
   cursor: pointer;
+  margin: 0 1rem ;
 }
 .color-popover{
      /* border-radius: 1rem !important; */

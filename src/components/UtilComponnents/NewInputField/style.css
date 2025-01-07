@@ -4,7 +4,6 @@
   justify-content: flex-start;
   align-items: center;
   gap:8px; 
-  margin-bottom: 0.5rem;
   font-size: 0.5rem;
 padding: 0.25rem 0;
 }
@@ -18,7 +17,7 @@ padding: 0.25rem 0;
   border: none;
   background-color: transparent;
   color: #ffffff;
-  border-bottom: solid 1px #e3e3e3;
+  border-bottom: solid 1px #454545;
   width: 3.5rem;
   text-align: center;
   padding: 0.25rem;

@@ -1,12 +1,22 @@
 .canvas {
   width: 100vw;
   height: 100vh;
-  background-position: center;
+  /* background-position: center;
   background-repeat: no-repeat;
-  background-image: url("../../Assets/Images/diamond-sunset.svg");
+  background-image: url("../../Assets/Images/diamond-sunset.svg"); */
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  --dot-bg: rgb( 33, 37, 41);
+  --dot-color: #3e3e3e;
+  --dot-size: 2px;
+  --dot-space: 16px;
+	background:
+		linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+		linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+		var(--dot-color);
+
 }
 .elements-wrapper{
 min-height: 85%;
