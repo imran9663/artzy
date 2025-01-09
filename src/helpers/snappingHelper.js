@@ -6,8 +6,8 @@ const guidelinesExists = (canvas, id) => {
     return objects.some((obj) => obj.id === id)
 }
 export const handleObjectMoving = (canvas, obj, guidelines, setGuidelines) => {
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    const canvasWidth = canvas.getWidth();
+    const canvasHeight = canvas.getHeight();
 
     const top = obj.top;
     const left = obj.left;
@@ -84,24 +84,24 @@ export const handleObjectMoving = (canvas, obj, guidelines, setGuidelines) => {
     canvas.renderAll()
 }
 export const createVerticalGuideLine = (canvas, x, id) => {
-    return new Line([x, 0, x, canvas.height], {
+    return new Line([x, 0, x, canvas.getHeight()], {
         id,
         stroke: 'red',
         strokeWidth: 1,
         selectable: false,
         evented: false,
-        strokeDashArray: [5, 5],
+        strokeDashArray: [10, 10],
         opacity: 0.6
     })
 }
 export const createHorizontalGuideLine = (canvas, y, id) => {
-    return new Line([0, y, canvas.width, y], {
+    return new Line([0, y, canvas.getWidth(), y], {
         id,
         stroke: 'red',
         strokeWidth: 1,
         selectable: false,
         evented: false,
-        strokeDashArray: [5, 5],
+        strokeDashArray: [10, 10],
         opacity: 0.6
     })
 }

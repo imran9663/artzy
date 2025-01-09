@@ -1,0 +1,6 @@
+.foo-bar{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    padding: 0 1rem;
+}

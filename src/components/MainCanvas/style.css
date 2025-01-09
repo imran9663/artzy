@@ -1,14 +1,13 @@
-.canvas {
-  width: 100vw;
-  height: 100vh;
-  /* background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("../../Assets/Images/diamond-sunset.svg"); */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  
-  --dot-bg: rgb( 33, 37, 41);
+
+.layout{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    --dot-bg: rgb( 33, 37, 41);
   --dot-color: #3e3e3e;
   --dot-size: 2px;
   --dot-space: 16px;
@@ -18,61 +17,34 @@
 		var(--dot-color);
 
 }
-.elements-wrapper{
-min-height: 85%;
-display: flex;
-flex-direction: row;
+.logo-navbar{
+    width: 100%;
+    padding: 0.5rem 1rem;
+    height: 3rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-.elements {
- padding: 0.5rem 0 ;
-  width: 3rem;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  border-radius: 5px;
-  background-color: aliceblue;
-  margin: 0 0.5rem;
+.logo-wrapper{
+    width: auto;
+    height: 3rem;
+}
+.logo-wrapper img{
+  height: 3rem;
+}
+.canvas {
+  width: 100vw;
+  height: 100vh;
+  /* background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../../Assets/Images/diamond-sunset.svg"); */
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem ;
+  background: transparent !important;
+  
 }
-.elementBtn{
-    display: inline-block;
-    font-weight: 400;
-    color: #212529;
-    text-align: center;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-}
-.elementBtn:hover{
-  background-color: antiquewhite;
-  cursor: pointer;
-}
-.elementBtnSelected{
-    background-color: burlywood;
-}
-
-
-/* .elementOptions {
-  width: 15rem;
-  min-height: 85%;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  border-radius: 5px;
-  background-color: aliceblue;
-  margin: 0 0.5rem;
-} */
 .options-heading{
   font-size: 0.8rem;
  margin-left: 0.5rem;
@@ -86,28 +58,17 @@ flex-direction: row;
   margin: 0.5rem ;
 
 }
-/* .input-label{
-font-size: 0.8rem;
-}
-.input-wrapper{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap:8px; 
-  margin-bottom: 0.5rem;
-  font-size: 0.5rem;
-}
-
-.input{
-height: 1.5rem;
-font-size: 0.5rem;
-}
-.input:focus{
-  box-shadow: none;
-} */
 .canvasStage{
-  position: relative;
+    flex: 1;
+    display: flex;
+    width: 100%;
+     height:-webkit-fill-available;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* border: solid red 1px; */
+    margin: 3rem 0;
+    transition: "transform 0.1s ease",
 }
 .context-menu-list{
   padding: 0.25rem 0.5rem;
@@ -161,42 +122,4 @@ border: none;
   color:#fff !important;
   background-color: transparent  !important;
   border-bottom: solid 2px #ffb703 !important;
-}
-/* ===================================Image Options Styles ===================================== */
-.imageOptionsCard{
-  min-width: 15rem;
-  max-width: 15rem;
-} 
-.imageOptionsTabs{
-padding:0 2.5rem 0.5rem  2.5rem ;
-border-bottom: 1px solid #e2e2e2 !important;
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-border: none;
-}
-.imageOptionsTabs li button{
-  border: none !important;
-  padding: 0.25rem;
-  font-size: 0.5rem !important;
-  color: black;
-}
-.imageOptionsTabs li button:hover{
-  color: black !important;
-}
-.imageOptionsTabs li .active{
-  border: none !important;
-  padding: 0.25rem;
-  font-size: 0.5rem !important;
-  font-weight: 600;
-  border-bottom: solid 2px #ffb703 !important;
-}
-.thumbnail{
-      width: 5rem;
-    /* height: 10%; */
-    object-fit: cover;
-    margin: 0.5rem;
-   
-  
 }
