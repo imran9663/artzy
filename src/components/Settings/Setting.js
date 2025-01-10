@@ -8,9 +8,9 @@ import { RxBorderWidth } from "react-icons/rx";
 import { TbFlipHorizontal, TbFlipVertical, TbJoinBevel, TbJoinRound, TbJoinStraight, TbPaletteFilled, TbRadiusTopLeft, TbSkewX, TbSkewY } from "react-icons/tb";
 import { convertPaletteToFabricGradientV2 } from "../../Utils/common";
 import { COLOR_TYPE, SHAPES } from "../../Utils/Constants";
-import ColorCodeInput from "../UtilComponnents/ColorCodeInput/Index";
-import NewInputField from "../UtilComponnents/NewInputField/Index";
-import RangeSlider from "../UtilComponnents/RangeSlider/Index";
+import ColorCodeInput from "../UtilComponents/ColorCodeInput/Index";
+import NewInputField from "../UtilComponents/NewInputField/Index";
+import RangeSlider from "../UtilComponents/RangeSlider/Index";
 import "./styles.css";
 
 const Setting = ({ canvas }) => {

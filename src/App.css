@@ -4,7 +4,7 @@ body{
     padding: 0;font-family: "Montserrat", serif !important;
   font-optical-sizing: auto;
   font-style: normal;
-  
+  background-color: #212121;
 }
 .canvas-container{
 width: 100vw;

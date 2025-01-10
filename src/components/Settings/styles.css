@@ -76,7 +76,7 @@
   display: none;
  }
  .dd-toggle-btn:hover{
-  background: inherit;
+  background: unset;
  }
  .dd-item, .dd-item:hover{
   text-align: center;

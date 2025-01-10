@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import { Canvas } from 'fabric';
 import { BiArrowFromBottom, BiArrowFromTop, BiHide, BiShow } from 'react-icons/bi';
+import { saveCanvasStateToLocalStorage } from '../../helpers/localstorageHelpers';
 const Layers = ({ canvas }) => {
     const [layers, setLayers] = useState([]);
     const [selectedLayer, setSelectedLayer] = useState(null);
@@ -81,7 +82,6 @@ const Layers = ({ canvas }) => {
                     type: ele.type,
                     opacity: ele.opacity
                 }));
-
             setLayers([...layeredObjects].reverse())
         }
     }
@@ -103,12 +103,26 @@ const Layers = ({ canvas }) => {
     }
     useEffect(() => {
         if (canvas) {
-            canvas.on('object:added', updateLayers)
-            canvas.on('object:removed', updateLayers)
-            canvas.on('object:modified', updateLayers)
+            canvas.on('object:added', () => {
+                updateLayers()
+            })
+            canvas.on('object:removed', () => {
+                updateLayers()
 
-            canvas.on("selection:created", handleObjectSelected)
-            canvas.on("selection:updated", handleObjectSelected)
+            })
+            canvas.on('object:modified', () => {
+                updateLayers()
+                console.log("object:modified")
+            })
+
+            canvas.on("selection:created", (event) => {
+                handleObjectSelected(event)
+                console.log("selection:created")
+            })
+            canvas.on("selection:updated", (event) => {
+                handleObjectSelected(event)
+                console.log("selection:updated")
+            })
             canvas.on("selection:cleared", () => setSelectedLayer(null))
             updateLayers()
             return () => {
