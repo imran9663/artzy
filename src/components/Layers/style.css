@@ -1,9 +1,25 @@
 .layers-container{
 width: 100%;
-height: auto;
-border: unset;
-min-height: 10rem; 
-margin: 0.5rem 0;
 
+border: unset;
+height: 100%;
+margin: 0.5rem 0;
 padding: 0.25rem 0;
+}
+.layers-group{
+    height: 33rem;
+    overflow-y: scroll;
+}
+.layers-group::-webkit-scrollbar {
+  width: 4px !important;               /* width of the entire scrollbar */
+}
+
+.layers-group::-webkit-scrollbar-track {
+  background:#454545;        /* color of the tracking area */
+}
+.layers-group::-webkit-scrollbar-thumb {
+  background-color: #ffb703 !important;    /* color of the scroll thumb */
+  border-radius: 2px !important;  
+  border: 1px solid #454545;     /* roundness of the scroll thumb */
+  /* creates padding around scroll thumb */
 }

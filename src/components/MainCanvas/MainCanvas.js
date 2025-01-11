@@ -12,6 +12,7 @@ import NavBar from "../Navbar";
 import Settings from "../Settings/Setting";
 import "./style.css";
 import Footer from "../Footer";
+import { TbChevronsLeft, TbChevronsRight } from "react-icons/tb";
 const MainCanvas = (props) => {
 
 // const width = 1080 / 2;
@@ -31,14 +32,21 @@ const MainCanvas = (props) => {
     });
     const [shapeOptionsTabKey, setShapeOptionsTabKey] = useState("styles");
     const [guideLines, setGuideLines] = useState([]);
+    const [showSettingsPanel, setShowSettingsPanel] = useState(false);
 
 
 
     useEffect(() => {
         if (canvasRef.current) {
             const initCanvas = new Canvas(canvasRef.current);
-            const responsiveCanvas = setupCanvas(initCanvas, 'canvasStage', 1920, 1080);
+            const responsiveCanvas = setupCanvas(initCanvas, 'canvasStage', canvasSize.width, canvasSize.height);
             setCanvas(responsiveCanvas);
+            initCanvas.on("selection:created", (event) => {
+                setShowSettingsPanel(true);
+            });
+            initCanvas.on("selection:cleared", () => {
+                setShowSettingsPanel(false)
+            });
             initCanvas.on("object:moving", (event) => {
                 handleObjectMoving(initCanvas, event.target, guideLines, setGuideLines);
             });
@@ -67,7 +75,7 @@ const MainCanvas = (props) => {
                 <div className="canvas">
                     <Elements canvas={canvas} />
 
-                    <div id="canvasStage" style={{ transform: `scale(${stageScale})`, }} onWheel={handleWheel} useRef={stageRef} className="canvasStage">
+                    <div id="canvasStage" style={{ transform: `scale(${stageScale})`, zIndex: 0 }} onWheel={handleWheel} useRef={stageRef} className="canvasStage">
                         <canvas id="canvas" ref={canvasRef}></canvas>
                         {contextMenu.show && (
                             <div
@@ -75,6 +83,7 @@ const MainCanvas = (props) => {
                                     position: "absolute",
                                     left: contextMenu.x,
                                     top: contextMenu.y,
+                                    zIndex: 99
                                 }}
                             >
                                 {/* Content of your context menu */}
@@ -99,7 +108,10 @@ const MainCanvas = (props) => {
                             </div>
                         )}
                     </div>
-                    <div className="settingsPanel bg-dark">
+                    <div className={`settingsPanel bg-dark ${showSettingsPanel && 'showPanel'}`}>
+                        <button onClick={() => setShowSettingsPanel(!showSettingsPanel)} className="open-panel-btn text-warning btn  py-3 px-0 bg-dark">
+                            {showSettingsPanel ? <TbChevronsRight /> : <TbChevronsLeft />}
+                        </button>
                         <Tabs
                             id="shapeOptions"
                             activeKey={shapeOptionsTabKey}

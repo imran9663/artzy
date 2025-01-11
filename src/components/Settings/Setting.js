@@ -5,7 +5,7 @@ import { BiChevronDown, BiSolidCircle, BiSolidRectangle, BiSolidSquare } from "r
 import { MdBlurOn } from "react-icons/md";
 import { PiAngle } from "react-icons/pi";
 import { RxBorderWidth } from "react-icons/rx";
-import { TbFlipHorizontal, TbFlipVertical, TbJoinBevel, TbJoinRound, TbJoinStraight, TbPaletteFilled, TbRadiusTopLeft, TbSkewX, TbSkewY } from "react-icons/tb";
+import { TbFlipHorizontal, TbFlipVertical, TbJoinBevel, TbJoinRound, TbJoinStraight, TbPaletteFilled, TbRadiusTopLeft, TbSkewX, TbSkewY, TbSquareOff } from "react-icons/tb";
 import { convertPaletteToFabricGradientV2 } from "../../Utils/common";
 import { COLOR_TYPE, SHAPES } from "../../Utils/Constants";
 import ColorCodeInput from "../UtilComponents/ColorCodeInput/Index";
@@ -213,7 +213,7 @@ const Setting = ({ canvas }) => {
     }
     return (
         <>
-            {selectedObject && (
+            {selectedObject ? (
                 <div className="optionsWrapper">
                     <Accordion defaultActiveKey={['0']} alwaysOpen>
                         <Accordion.Item eventKey="0">
@@ -558,13 +558,17 @@ const Setting = ({ canvas }) => {
                             handleChange={handleOpacityChange}
                         />
                     </div>
-
-
-
-
-
                 </div>
-            )}
+            ) :
+                <>
+                    <div className="noShape-selected d-flex flex-column  justify-content-center align-items-center">
+                        <div className="noShape-icon ">
+                            <TbSquareOff />
+                        </div>
+                        <p className="noShape-selected-heading  text-center ">No Object Selected</p>
+                        <p className="noShape-selected-helper text-center "> Select the object to view Styles</p>
+                    </div>
+                </>}
         </>
     );
 };

@@ -23,7 +23,7 @@ input[type="range"] {
 	color: #ffb703;
 	--thumb-height: 1.0rem;
 	--track-height: 0.125rem;
-	--track-color: #e3e3e3;
+	--track-color: #454545;
 	--brightness-hover:100%;
 	--brightness-down: 100%;
 	--clip-edges: 0.125em;

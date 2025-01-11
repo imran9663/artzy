@@ -37,7 +37,7 @@ const Footer = (props) => {
                         <Tb.TbMinus />
                     </button>
                     <RangeSlider id={'zoomControl'} name={'zoomControl'} label={''} value={(canvasZoom * 100)} min={50} max={200} steps={1} handleChange={handleZoomChange} />
-                    <span style={{ lineHeight: "32px" }} className='text-light'>%</span>
+                    <span style={{ lineHeight: "32px", }} className='text-light'>%</span>
                 </div>
             </nav>
         </>

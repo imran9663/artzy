@@ -7,8 +7,8 @@ import NewInputField from '../UtilComponents/NewInputField/Index';
 
 const NavBar = ({ canvas }) => {
     const [canvasSize, setCanvasSize] = useState({
-        width: 1920,
-        height: 1080,
+        width: 540,
+        height: 540,
     });
     const handleSaveBtnClick = () => {
         const saveTo = canvas.toJSON();
@@ -58,7 +58,7 @@ const NavBar = ({ canvas }) => {
         // canvas.setDimensions({ width: newWidth, height: newHeight });
         // canvas.renderAll()
     }
-    const downloadCanvas = (canvas, format = 'png', filename = 'canvas') => {
+    const downloadCanvas = (canvas, format = 'svg', filename = 'canvas') => {
         if (!canvas) return;
 
         let dataURL;
