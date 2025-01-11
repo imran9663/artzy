@@ -3,6 +3,7 @@ import './style.css'
 import { Canvas } from 'fabric';
 import { BiArrowFromBottom, BiArrowFromTop, BiHide, BiShow } from 'react-icons/bi';
 import { saveCanvasStateToLocalStorage } from '../../helpers/localstorageHelpers';
+import { TbLayersOff, TbSquareOff } from 'react-icons/tb';
 const Layers = ({ canvas }) => {
     const [layers, setLayers] = useState([]);
     const [selectedLayer, setSelectedLayer] = useState(null);
@@ -112,16 +113,13 @@ const Layers = ({ canvas }) => {
             })
             canvas.on('object:modified', () => {
                 updateLayers()
-                console.log("object:modified")
             })
 
             canvas.on("selection:created", (event) => {
                 handleObjectSelected(event)
-                console.log("selection:created")
             })
             canvas.on("selection:updated", (event) => {
                 handleObjectSelected(event)
-                console.log("selection:updated")
             })
             canvas.on("selection:cleared", () => setSelectedLayer(null))
             updateLayers()
@@ -139,7 +137,7 @@ const Layers = ({ canvas }) => {
 
 
     return (
-        layers.length > 0 &&
+        layers.length > 0 ?
         <div className="layers-container">
             <div className="d-flex flex-row justify-content-end gap-1 mb-1">
                 <div className="btn-group  btn-group-sm d-flex flex-row justify-content-end">
@@ -156,7 +154,7 @@ const Layers = ({ canvas }) => {
 
             </div>
 
-            <ul className="list-group">
+                <ul className="list-group layers-group">
                 {layers.map((layer) => (
                     <li
 
@@ -178,6 +176,16 @@ const Layers = ({ canvas }) => {
 
             </ul>
         </div>
+            : <>
+                <>
+                    <div className="noShape-selected d-flex flex-column  justify-content-center align-items-center">
+                        <div className="noShape-icon">
+                            <TbLayersOff />
+                        </div>
+                        <p className="noShape-selected-heading  text-center ">No Layers to Show</p>
+                        <p className="noShape-selected-helper text-center "> Select the object to view Layers</p>
+                    </div>
+                </></>
     )
 }
 

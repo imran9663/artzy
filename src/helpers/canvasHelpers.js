@@ -4,7 +4,6 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
     propCanvas.originalWidth = originalWidth;
     propCanvas.originalHeight = originalHeight;
 
-    console.log("parent.clientWidth", parent.clientWidth, parent.clientHeight);
 
     // Calculate scale to fit the viewport while maintaining aspect ratio
     const viewportWidth = parent.clientWidth;
@@ -50,3 +49,56 @@ export function enableScaleOnScroll (divId) {
         element.style.transform = `scale(${scale})`;
     });
 }
+export const downloadCanvas = (canvas, format = "png", filename = "canvas") => {
+    // Backup current canvas state
+    const currentWidth = canvas.getWidth();
+    const currentHeight = canvas.getHeight();
+    const currentZoom = canvas.getZoom();
+
+    // Resize canvas to original dimensions for export
+    canvas.setWidth(canvas.originalWidth);
+    canvas.setHeight(canvas.originalHeight);
+    canvas.setZoom(1);
+
+    const dataURL = canvas.toDataURL({
+        format,
+        multiplier: 1,
+        enableRetinaScaling: true,
+    });
+
+    // Restore canvas to scaled dimensions
+    canvas.setWidth(currentWidth);
+    canvas.setHeight(currentHeight);
+    canvas.setZoom(currentZoom);
+
+    // Trigger download
+    const link = document.createElement("a");
+    link.href = dataURL;
+    link.download = `${filename}.${format}`;
+    link.click();
+};
+export function createStar (points, radius) {
+    const step = Math.PI / points;
+    let vertices = [];
+
+    // Calculate vertices for the star shape
+    for (let i = 0; i < points * 2; i++) {
+        const angle = step * i;
+        const rad = i % 2 === 0 ? radius * 0.5 : (radius * 0.5) / 2; // Alternating radius
+        const x = Math.cos(angle) * rad;
+        const y = Math.sin(angle) * rad;
+        vertices.push({ x, y });
+    }
+    return vertices;
+}
+export const generatePolygonPoints = (sides, radius) => {
+    const points = [];
+    for (let i = 0; i < sides; i++) {
+        const angle = (Math.PI * 2 * i) / sides;
+        points.push({
+            x: radius + radius * Math.cos(angle),
+            y: radius + radius * Math.sin(angle),
+        });
+    }
+    return points;
+};
