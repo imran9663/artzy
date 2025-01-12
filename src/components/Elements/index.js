@@ -8,9 +8,10 @@ import { createStar, generatePolygonPoints } from '../../helpers/canvasHelpers';
 import { generateRandomHex } from '../../Utils/common';
 import { elementShapes } from '../../Utils/Constants';
 import './styles.css';
+import { CiText } from 'react-icons/ci';
 const Elements = ({ canvas }) => {
     const [imageOptionsTabKey, setImageOptionsTabKey] = useState("local");
-    const [defaultShapeFill] = useState(generateRandomHex())
+    const [defaultFill] = useState(generateRandomHex())
     const [localAssets, setLocalAssets] = useState([]);
     const [sidebarOptions, setSideBarOptions] = useState({
         elements: false,
@@ -31,7 +32,7 @@ const Elements = ({ canvas }) => {
                         left: x,
                         top: y,
                         radius: size / 2,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Square":
@@ -41,7 +42,7 @@ const Elements = ({ canvas }) => {
                         top: y,
                         width: size,
                         height: size,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -52,7 +53,7 @@ const Elements = ({ canvas }) => {
                         top: y,
                         width: size * 1.2,
                         height: size,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -63,7 +64,7 @@ const Elements = ({ canvas }) => {
                         top: y,
                         width: size,
                         height: size,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -79,7 +80,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -96,7 +97,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -114,7 +115,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -133,7 +134,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -143,7 +144,7 @@ const Elements = ({ canvas }) => {
 
                         left: x,
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -152,7 +153,7 @@ const Elements = ({ canvas }) => {
 
                         left: x,
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -161,7 +162,7 @@ const Elements = ({ canvas }) => {
 
                         left: x,
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -172,7 +173,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -189,7 +190,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -206,7 +207,7 @@ const Elements = ({ canvas }) => {
 
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -223,7 +224,7 @@ const Elements = ({ canvas }) => {
                             d: shape,
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -238,7 +239,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -249,7 +250,7 @@ const Elements = ({ canvas }) => {
                         left: x,
 
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "EquilateralTriangle":
@@ -263,7 +264,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -278,7 +279,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -293,7 +294,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -308,7 +309,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -319,7 +320,7 @@ const Elements = ({ canvas }) => {
                         left: x,
 
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Hexagram":
@@ -329,7 +330,7 @@ const Elements = ({ canvas }) => {
                         left: x,
 
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Octagram":
@@ -339,7 +340,7 @@ const Elements = ({ canvas }) => {
                         left: x,
 
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Ellipse":
@@ -349,7 +350,7 @@ const Elements = ({ canvas }) => {
                         left: x,
 
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Parabola":
@@ -359,7 +360,7 @@ const Elements = ({ canvas }) => {
 
                         top: y,
                         fill: "",
-                        stroke: defaultShapeFill,
+                        stroke: defaultFill,
                         strokeWidth: 2,
                     });
                     break;
@@ -370,7 +371,7 @@ const Elements = ({ canvas }) => {
 
                         top: y,
                         fill: "",
-                        stroke: defaultShapeFill,
+                        stroke: defaultFill,
                         strokeWidth: 2,
                     });
                     break;
@@ -389,7 +390,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -401,7 +402,7 @@ const Elements = ({ canvas }) => {
                                 radius: 20,
                                 left: 10,
                                 top: 10,
-                                fill: defaultShapeFill,
+                                fill: defaultFill,
                             }),
                             new fabric.Circle({
                                 radius: 15,
@@ -421,14 +422,14 @@ const Elements = ({ canvas }) => {
                                 height: 40,
                                 left: 15,
                                 top: 0,
-                                fill: defaultShapeFill,
+                                fill: defaultFill,
                             }),
                             new fabric.Rect({
                                 width: 40,
                                 height: 10,
                                 left: 0,
                                 top: 15,
-                                fill: defaultShapeFill,
+                                fill: defaultFill,
                             }),
                         ],
                         { left: x, top: y }
@@ -439,7 +440,7 @@ const Elements = ({ canvas }) => {
                         left: x,
 
                         top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Quadrilateral":
@@ -454,7 +455,7 @@ const Elements = ({ canvas }) => {
                             left: x,
 
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -517,7 +518,7 @@ const Elements = ({ canvas }) => {
                         {
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -537,7 +538,7 @@ const Elements = ({ canvas }) => {
                         {
                             left: x,
                             top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
 
                         }
                     );
@@ -553,6 +554,7 @@ const Elements = ({ canvas }) => {
                 canvas.setActiveObject(fabricShape);
             }
         }
+        handleSideBarClick("elements")
     };
     const handleChangeInputBtnClick = (e) => {
         const input = document.createElement('input');
@@ -619,7 +621,58 @@ const Elements = ({ canvas }) => {
     useEffect(() => {
         console.log("localAssets", localAssets);
     }, [localAssets])
+    const handleClickOnAddTextBox = (id = 'normal') => {
+        if (canvas) {
+            let x = (canvas.getWidth()) / 2; // Starting X coordinate
+            let y = (canvas.getHeight()) / 2;; // Starting Y coordinate
+            switch (id) {
+                case 'normal':
+                    const iText = new fabric.IText('Add your Text here', {
+                        left: x,
+                        top: y,
+                        fontSize: 16,
+                        fill: '#000000', fontStyle: 'normal'
+                    })
+                    canvas.add(iText);
+                    break;
+                case 'heading':
+                    const headingIText = new fabric.IText('Heading Text', {
+                        left: x,
+                        top: y,
+                        fontSize: 40,
+                        fill: '#000000',
+                        fontStyle: 'bold'
+                    })
+                    canvas.add(headingIText);
+                    break;
+                case 'subHeading':
+                    const subHeadingIText = new fabric.IText('Sub Heading Text', {
+                        left: x,
+                        top: y,
+                        fontSize: 28,
+                        fill: '#000000',
+                        fontStyle: 'bold'
+                    })
+                    canvas.add(subHeadingIText);
+                    break;
+                case 'paragraph':
+                    const textBox = new fabric.Textbox('Add your Paragraph Here', {
+                        left: x,
+                        top: y,
+                        width: 250,
+                        fontSize: 16,
+                        fill: '#000000',
+                        fontStyle: 'bold'
+                    })
+                    canvas.add(textBox);
+                    break;
+                default:
+                    break;
+            }
 
+            canvas.renderAll()
+        }
+    }
     return (
         <div className="elements-wrapper">
             <div className="elements">
@@ -630,7 +683,14 @@ const Elements = ({ canvas }) => {
                     className={`elementBtn`}
                 ><LuShapes />
                 </button>
-
+                <button
+                    id={"TEXT"}
+                    // onMouseOver={() => handleSideBarClick('text')}
+                    onClick={() => handleSideBarClick('text')}
+                    className={`elementBtn`}
+                >
+                    <Tb.TbLetterT />
+                </button>
                 <button
                     id={"IMAGE"}
                     // onMouseOver={() => handleSideBarClick('image')}
@@ -639,21 +699,22 @@ const Elements = ({ canvas }) => {
                 >
                     <Tb.TbPhotoPlus />
                 </button>
+
                 <button
                     id={"TEXT"}
-                    onMouseOver={() => handleSideBarClick('text')}
-                    onClick={() => handleSideBarClick('text')}
-                    className={`elementBtn`}
-                >
-                    <Tb.TbLetterT />
-                </button>
-                <button
-                    id={"TEXT"}
-                    onMouseOver={() => handleSideBarClick('text')}
+                    // onMouseOver={() => handleSideBarClick('text')}
                     onClick={() => handleSideBarClick('text')}
                     className={`elementBtn`}
                 >
                     <Tb.TbPencilBolt />
+                </button>
+                <button
+                    id={"TEXT"}
+                    // onMouseOver={() => handleSideBarClick('text')}
+                    onClick={() => handleSideBarClick('text')}
+                    className={`elementBtn`}
+                >
+                    <Tb.TbBackground />
                 </button>
             </div>
             {sidebarOptions.elements && <div className="card imageOptionsCard bg-dark">
@@ -717,7 +778,25 @@ const Elements = ({ canvas }) => {
                     </Tabs>
                 </div>
             )}
+            {sidebarOptions.text && <>
+                <div className="card imageOptionsCard bg-dark">
+                    <div className="shape-elements ">
+                        <div className="px-2">
+                            <button onClick={handleClickOnAddTextBox} className="btn mt-2 w-100 btn-warning ">
+                                <CiText /> Add Text box
+                            </button>
+                        </div>
 
+                        <hr className='text-light' />
+                        <div className=" px-2 d-flex flex-column">
+                            <button onClick={() => handleClickOnAddTextBox("heading")} className="btn  rounded btn-outline border-dark-bg font-dark-bg my-1 fs-1 fw-bold text-capitalize">Heading</button>
+                            <button onClick={() => handleClickOnAddTextBox("subHeading")} className="btn  rounded btn-outline border-dark-bg font-dark-bg my-1 fs-3 fw-bold  text-capitalize">Sub Heading</button>
+                            <button onClick={() => handleClickOnAddTextBox("paragraph")} className="btn  rounded btn-outline border-dark-bg font-dark-bg my-1 fs-6 text-capitalize">Paragraph</button>
+                        </div>
+
+                    </div>
+                </div>
+            </>}
         </div>
     )
 }

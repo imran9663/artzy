@@ -46,3 +46,6 @@ font-size: 0.5rem;
 .font-dark-bg{
    color: #929292 !important;
 }
+.border-dark-bg{
+   border-color: #929292 !important;
+}

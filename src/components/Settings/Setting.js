@@ -5,7 +5,7 @@ import { BiChevronDown, BiSolidCircle, BiSolidRectangle, BiSolidSquare } from "r
 import { MdBlurOn } from "react-icons/md";
 import { PiAngle } from "react-icons/pi";
 import { RxBorderWidth } from "react-icons/rx";
-import { TbFlipHorizontal, TbFlipVertical, TbJoinBevel, TbJoinRound, TbJoinStraight, TbPaletteFilled, TbRadiusTopLeft, TbSkewX, TbSkewY, TbSquareOff } from "react-icons/tb";
+import * as Tb from "react-icons/tb";
 import { convertPaletteToFabricGradientV2 } from "../../Utils/common";
 import { COLOR_TYPE, SHAPES } from "../../Utils/Constants";
 import ColorCodeInput from "../UtilComponents/ColorCodeInput/Index";
@@ -273,7 +273,7 @@ const Setting = ({ canvas }) => {
                                             <NewInputField
                                                 handleChange={handleInputChange}
                                                 type={"text"}
-                                                label={<TbRadiusTopLeft />}
+                                            label={<Tb.TbRadiusTopLeft />}
                                                 className="form-control  input"
                                                 value={shapeObject.rx}
                                                 name={"cornerRadius"}
@@ -307,7 +307,7 @@ const Setting = ({ canvas }) => {
 
                                     </div>
                                     <div className="options-row">
-                                        <ColorCodeInput label={<TbPaletteFilled />} id={'fill'} showGradientPanel={true} value={shapeObject.fill} handleChange={handleColorChange} />
+                                        <ColorCodeInput label={<Tb.TbPaletteFilled />} id={'fill'} showGradientPanel={true} value={shapeObject.fill} handleChange={handleColorChange} />
                                     </div>
                                 </div>
 
@@ -318,7 +318,7 @@ const Setting = ({ canvas }) => {
                             <Accordion.Body>
                                 <div className="pt-1">
                                     <div className="options-row">
-                                        <ColorCodeInput label={<TbPaletteFilled />}
+                                        <ColorCodeInput label={<Tb.TbPaletteFilled />}
                                             id={'stroke'} showGradientPanel={false}
                                             value={shapeObject.stroke}
                                             handleChange={handleColorChange} />
@@ -392,17 +392,17 @@ const Setting = ({ canvas }) => {
                                             <button onClick={() => handleValueInputChange('strokeLineJoin', 'miter')} id='strokeLineJoin' name={'miter'}
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title={"Miter Join"} className="btn  text-bg-dark">
-                                                <TbJoinStraight />
+                                                <Tb.TbJoinStraight />
                                             </button>
                                             <button onClick={() => handleValueInputChange('strokeLineJoin', 'round')} id='strokeLineJoin' name={'round'}
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title={"Round Join"} className="btn text-bg-dark">
-                                                <TbJoinRound />
+                                                <Tb.TbJoinRound />
                                             </button>
                                             <button onClick={() => handleValueInputChange('strokeLineJoin', 'bevel')} id='strokeLineJoin' name={'bevel'}
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title={"Bevel Join"} className="btn text-bg-dark">
-                                                <TbJoinBevel />
+                                                <Tb.TbJoinBevel />
                                             </button>
                                         </div>
                                     </div>
@@ -454,7 +454,7 @@ const Setting = ({ canvas }) => {
                                     </div>
                                     <div className="options-row">
 
-                                        <ColorCodeInput label={<TbPaletteFilled />} id={'shadowColor'} showGradientPanel={false} value={shadowObj?.color} handleChange={handleColorChange} />
+                                        <ColorCodeInput label={<Tb.TbPaletteFilled />} id={'shadowColor'} showGradientPanel={false} value={shadowObj?.color} handleChange={handleColorChange} />
 
                                     </div>
                                 </div>
@@ -500,7 +500,7 @@ const Setting = ({ canvas }) => {
                                             id={"skewX"}
                                             type={"text"}
                                             handleChange={handleInputChange}
-                                            label={<TbSkewX />}
+                                            label={<Tb.TbSkewX />}
                                             toolTip
                                             Title={'Skew Horizontal'}
                                         />
@@ -512,7 +512,7 @@ const Setting = ({ canvas }) => {
                                             id={"skewY"}
                                             type={"text"}
                                             handleChange={handleInputChange}
-                                            label={<TbSkewY />}
+                                            label={<Tb.TbSkewY />}
                                             toolTip
                                             Title={'Skew Horizontal'}
                                         />
@@ -528,7 +528,7 @@ const Setting = ({ canvas }) => {
                                                 title={"Flip Horizontal"}
                                                 id="flipX"
                                                 className={shapeObject.flipX ? "btn  bg-warning text-dark" : "btn  text-bg-dark"}>
-                                                <TbFlipHorizontal />
+                                                <Tb.TbFlipHorizontal />
                                             </button>
                                             <button
                                                 onClick={() => handleValueInputChange('flipY', !shapeObject.flipY)}
@@ -536,7 +536,7 @@ const Setting = ({ canvas }) => {
                                                 title={"Flip Vertical"}
                                                 id="flipY"
                                                 className={shapeObject.flipY ? "btn  bg-warning text-dark" : "btn  text-bg-dark"}>
-                                                <TbFlipVertical />
+                                                <Tb.TbFlipVertical />
                                             </button>
 
                                         </div>
@@ -563,7 +563,7 @@ const Setting = ({ canvas }) => {
                 <>
                     <div className="noShape-selected d-flex flex-column  justify-content-center align-items-center">
                         <div className="noShape-icon ">
-                            <TbSquareOff />
+                            <Tb.TbSquareOff />
                         </div>
                         <p className="noShape-selected-heading  text-center ">No Object Selected</p>
                         <p className="noShape-selected-helper text-center "> Select the object to view Styles</p>

@@ -46,6 +46,7 @@ z-index: 1;
 .imageOptionsCard{
   min-width: 15rem;
   max-width: 15rem;
+  width: 15rem;
   min-height: 100%;
   height: 100%; 
   overflow: hidden;
