@@ -13,7 +13,6 @@ const Footer = (props) => {
         setCanvasZoom(1);
     }
     const handleIncrement = () => {
-        console.log("handleIncrement", canvasZoom);
         if (canvasZoom < 2) {
             setCanvasZoom(() => canvasZoom + 0.1)
         }

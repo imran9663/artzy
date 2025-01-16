@@ -1,4 +1,3 @@
-import * as fabric from 'fabric'
 
 export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight) => {
     // Set the original dimensions for export
@@ -14,8 +13,6 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
     const scaleWidth = viewportWidth / originalWidth;
     const scaleHeight = viewportHeight / originalHeight;
     const scaleFactor = (Math.min(scaleWidth, scaleHeight));
-    console.log("scaleFactor", scaleFactor);
-
     const scaledWidth = originalWidth * scaleFactor;
     const scaledHeight = originalHeight * scaleFactor;
 
@@ -37,8 +34,6 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
     return propCanvas
 };
 export function enableScaleOnScroll (divId) {
-    console.log("divId", divId);
-
     const element = document.getElementById(divId);
 
     if (!element) {

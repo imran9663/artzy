@@ -6,9 +6,10 @@ const guidelinesExists = (canvas, id) => {
     return objects.some((obj) => obj.id === id)
 }
 export const handleObjectMoving = (canvas, obj, guidelines, setGuidelines) => {
-    const canvasWidth = canvas.getWidth() / 0.6546;
-    const canvasHeight = canvas.getHeight() / 0.6546;
-    console.log("canvasW,canvasH", canvasWidth, canvasHeight);
+    const zoom = canvas.getZoom();
+
+    const canvasWidth = canvas.getWidth() / zoom;
+    const canvasHeight = canvas.getHeight() / zoom;
 
     const top = obj.top;
     const left = obj.left;

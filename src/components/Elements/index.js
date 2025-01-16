@@ -28,9 +28,6 @@ const Elements = ({ canvas }) => {
             const size = 100;
             let x = (canvas.getWidth() - size) / 2; // Starting X coordinate
             let y = (canvas.getHeight() - size) / 2;; // Starting Y coordinate
-            console.log("size, CW,CH,x,y", size, canvas.getWidth(), canvas.getHeight(), x, y)
-            console.log("canvas.width", canvas.width)
-            console.log("canvas.height", canvas.height)
             let fabricShape;
             switch (shape) {
                 case "Circle":
@@ -598,12 +595,12 @@ const Elements = ({ canvas }) => {
             const canvasH = canvas.getHeight();
             const scale = Math.min(canvasW / imgW, canvasH / imgH);
             canvas.renderAll();
-            console.log("ImageOptions", {
-                left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
-                top: Math.abs((canvasW - (imgH * scale)) / 2),
-                width: (imgW * scale),// Center vertically
-                height: (imgH * scale)
-            });
+            // console.log("ImageOptions", {
+            //     left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
+            //     top: Math.abs((canvasW - (imgH * scale)) / 2),
+            //     width: (imgW * scale),// Center vertically
+            //     height: (imgH * scale)
+            // });
 
             const fabricImage = new fabric.FabricImage(imageElement, {
                 left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
@@ -624,9 +621,9 @@ const Elements = ({ canvas }) => {
         });
 
     }
-    useEffect(() => {
-        console.log("localAssets", localAssets);
-    }, [localAssets])
+    // useEffect(() => {
+    //     console.log("localAssets", localAssets);
+    // }, [localAssets])
     const handleClickOnAddTextBox = (id = 'normal') => {
         if (canvas) {
             let x = (canvas.getWidth()) / 2; // Starting X coordinate
@@ -790,7 +787,7 @@ const Elements = ({ canvas }) => {
                 <div className="card imageOptionsCard bg-dark">
                     <div className="shape-elements ">
                         <div className="px-2">
-                            <button onClick={handleClickOnAddTextBox} className="btn mt-2 w-100 btn-warning ">
+                            <button onClick={() => handleClickOnAddTextBox('normal')} className="btn mt-2 w-100 btn-warning ">
                                 <CiText /> Add Text box
                             </button>
                         </div>

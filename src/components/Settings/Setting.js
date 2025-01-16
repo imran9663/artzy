@@ -214,7 +214,6 @@ const Setting = ({ canvas }) => {
     const updateFont = async (font) => {
         try {
             await document.fonts.load(`16px ${font}`);
-            console.log(`Font ${font} is loaded.`);
             if (selectedObject) {
                 selectedObject.set({ "fontFamily": font });
                 canvas.renderAll();
