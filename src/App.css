@@ -49,3 +49,8 @@ font-size: 0.5rem;
 .border-dark-bg{
    border-color: #929292 !important;
 }
+
+  .input-number-type[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+
+}

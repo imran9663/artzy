@@ -16,6 +16,8 @@ export const SHAPES = {
     line: "line",
     polygon: "polygon",
     ellipse: "ellipse",
+    iText: 'i-text',
+    textbox: 'textbox'
 }
 export const COLOR_TYPE = {
     solid: 'solid',

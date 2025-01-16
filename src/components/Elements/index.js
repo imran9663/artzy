@@ -9,10 +9,12 @@ import { generateRandomHex } from '../../Utils/common';
 import { elementShapes } from '../../Utils/Constants';
 import './styles.css';
 import { CiText } from 'react-icons/ci';
+import { handleObjectMoving } from '../../helpers/snappingHelper';
 const Elements = ({ canvas }) => {
     const [imageOptionsTabKey, setImageOptionsTabKey] = useState("local");
     const [defaultFill] = useState(generateRandomHex())
     const [localAssets, setLocalAssets] = useState([]);
+    const [guideLines, setGuideLines] = useState([]);
     const [sidebarOptions, setSideBarOptions] = useState({
         elements: false,
         image: false,
@@ -22,9 +24,13 @@ const Elements = ({ canvas }) => {
     const handleElementBtnClick = (shape) => {
 
         if (canvas) {
-            const size = (canvas.getWidth() + canvas.getHeight() / 2) * 0.3; // Default size for shapes
+            // const size = Math.round((canvas.getWidth() + canvas.getHeight() / 2) * 0.25); // Default size for shapes
+            const size = 100;
             let x = (canvas.getWidth() - size) / 2; // Starting X coordinate
             let y = (canvas.getHeight() - size) / 2;; // Starting Y coordinate
+            console.log("size, CW,CH,x,y", size, canvas.getWidth(), canvas.getHeight(), x, y)
+            console.log("canvas.width", canvas.width)
+            console.log("canvas.height", canvas.height)
             let fabricShape;
             switch (shape) {
                 case "Circle":
@@ -37,7 +43,6 @@ const Elements = ({ canvas }) => {
                     break;
                 case "Square":
                     fabricShape = new fabric.Rect({
-
                         left: x,
                         top: y,
                         width: size,
@@ -552,6 +557,7 @@ const Elements = ({ canvas }) => {
                 canvas.add(fabricShape);
                 canvas.renderAll();
                 canvas.setActiveObject(fabricShape);
+                handleObjectMoving(canvas, fabricShape, guideLines, setGuideLines);
             }
         }
         handleSideBarClick("elements")
@@ -631,9 +637,10 @@ const Elements = ({ canvas }) => {
                         left: x,
                         top: y,
                         fontSize: 16,
-                        fill: '#000000', fontStyle: 'normal'
+                        fill: '#000000', fontWeight: 'normal', fontFamily: "Roboto"
                     })
                     canvas.add(iText);
+                    canvas.setActiveObject(iText);
                     break;
                 case 'heading':
                     const headingIText = new fabric.IText('Heading Text', {
@@ -641,9 +648,9 @@ const Elements = ({ canvas }) => {
                         top: y,
                         fontSize: 40,
                         fill: '#000000',
-                        fontStyle: 'bold'
+                        fontWeight: 'bold', fontFamily: "Roboto"
                     })
-                    canvas.add(headingIText);
+                    canvas.add(headingIText); canvas.setActiveObject(headingIText);
                     break;
                 case 'subHeading':
                     const subHeadingIText = new fabric.IText('Sub Heading Text', {
@@ -651,9 +658,9 @@ const Elements = ({ canvas }) => {
                         top: y,
                         fontSize: 28,
                         fill: '#000000',
-                        fontStyle: 'bold'
+                        fontWeight: 'bold', fontFamily: "Roboto"
                     })
-                    canvas.add(subHeadingIText);
+                    canvas.add(subHeadingIText); canvas.setActiveObject(subHeadingIText);
                     break;
                 case 'paragraph':
                     const textBox = new fabric.Textbox('Add your Paragraph Here', {
@@ -662,9 +669,10 @@ const Elements = ({ canvas }) => {
                         width: 250,
                         fontSize: 16,
                         fill: '#000000',
-                        fontStyle: 'bold'
+                        fontWeight: 'bold', fontFamily: "Roboto"
                     })
                     canvas.add(textBox);
+                    canvas.setActiveObject(textBox);
                     break;
                 default:
                     break;
@@ -689,7 +697,7 @@ const Elements = ({ canvas }) => {
                     onClick={() => handleSideBarClick('text')}
                     className={`elementBtn`}
                 >
-                    <Tb.TbLetterT />
+                    <Tb.TbTypography />
                 </button>
                 <button
                     id={"IMAGE"}

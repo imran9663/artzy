@@ -1,3 +1,5 @@
+import * as fabric from 'fabric'
+
 export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight) => {
     // Set the original dimensions for export
     const parent = document.getElementById(parentID);
@@ -11,7 +13,8 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
 
     const scaleWidth = viewportWidth / originalWidth;
     const scaleHeight = viewportHeight / originalHeight;
-    const scaleFactor = Math.min(scaleWidth, scaleHeight);
+    const scaleFactor = (Math.min(scaleWidth, scaleHeight));
+    console.log("scaleFactor", scaleFactor);
 
     const scaledWidth = originalWidth * scaleFactor;
     const scaledHeight = originalHeight * scaleFactor;
@@ -20,7 +23,16 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
     propCanvas.setWidth(scaledWidth);
     propCanvas.setHeight(scaledHeight);
     propCanvas.setZoom(scaleFactor);
-
+    // const line = new fabric.Line([0, originalHeight / 2, originalWidth, originalHeight / 2], {
+    //     stroke: "red",
+    //     selectable: false
+    // });
+    // propCanvas.add(line)
+    // const line2 = new fabric.Line([originalWidth / 2, 0, originalWidth / 2, originalHeight], {
+    //     stroke: "blue",
+    //     selectable: false
+    // });
+    // propCanvas.add(line2)
     propCanvas.renderAll()
     return propCanvas
 };

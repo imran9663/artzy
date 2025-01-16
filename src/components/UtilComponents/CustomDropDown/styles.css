@@ -1,0 +1,84 @@
+.custom-dd-wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    max-width: 13rem;
+    width: 13rem;
+
+}
+.custom-dd-head{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+      border-bottom: solid #454545 1px;
+  outline: none;
+    align-items: center;
+}
+
+.dd-head-input,.dd-head-input:focus,.dd-head-input:focus-visible{
+background-color: transparent; 
+   border: unset;
+   outline: none;
+   padding:0.25rem  0.5rem ;
+   width: 100%;font-size: 0.8rem;
+color:white ;
+}
+.dd-head-btn,.dd-head-btn:focus,.dd-head-btn:focus-visible{
+outline: none;
+border: unset;
+border-radius: unset;
+padding: 0;
+padding:0.25rem  ;
+}
+.custom-dd-body{
+    width: 100%;
+    height: 20rem;
+    max-height: 20rem;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    border: solid #454545 1px;
+    overflow-y: scroll;
+    height: 0rem;
+    position: absolute;
+    top: 32px;
+    left: 0;
+    z-index: 9999;
+    transition: height 150ms ease-in-out ;
+    /* transform: translateY(-100%); */
+}
+.dd-list-item,.dd-list-item:hover{
+    width: 100%;
+    border-radius: 0;
+    text-align: start;
+    padding:0.25rem  0.5rem ;
+    outline: none;
+    color: white;
+    font-size: 0.8rem;
+}
+.list-active{
+    background-color: #ffb703;
+    color: #454545;
+}
+.custom-dd-body::-webkit-scrollbar {
+  width: 4px !important;               /* width of the entire scrollbar */
+}
+
+.custom-dd-body::-webkit-scrollbar-track {
+  background:#454545;        /* color of the tracking area */
+}
+.custom-dd-body::-webkit-scrollbar-thumb {
+  background-color: #ffb703 !important;    /* color of the scroll thumb */
+  border-radius: 2px !important;  
+  border: 1px solid #454545;     /* roundness of the scroll thumb */
+  /* creates padding around scroll thumb */
+}
+.dd-open{
+  transition: height 150ms ease-in-out ;
+  height: fit-content;
+/* transform: translate(0%); */
+}
