@@ -300,8 +300,31 @@ const Setting = ({ canvas }) => {
     }
     const handleObjectAlignClick = (id, value) => {
         if (selectedObject) {
-            selectedObject.set({ [id]: value });
-            setShapeObject({ ...shapeObject, [id]: value })
+            const objWidth = selectedObject.width;
+            const objHeight = selectedObject.height;
+            const zoom = canvas.getZoom();
+
+            const canvasWidth = canvas.getWidth() / zoom;
+            const canvasHeight = canvas.getHeight() / zoom;
+
+            const top = selectedObject.top;
+            const left = selectedObject.left;
+            const right = left + (selectedObject.width * selectedObject.scaleX);
+            const bottom = top + (selectedObject.height * selectedObject.scaleY);
+
+            const centerX = left + (selectedObject.width * selectedObject.scaleX) / 2;
+            const centerY = top + (selectedObject.height * selectedObject.scaleY) / 2;
+            if (id === 'originX' && value === 'left') {
+                //horizontal left
+                selectedObject.set({ left: 0 });
+                setShapeObject({ ...shapeObject, left: 0 })
+            }
+            if (id === 'originX' && value === 'right') {
+                //horizontal right
+                selectedObject.set({ left: 0 });
+                setShapeObject({ ...shapeObject, left: canvasWidth - objWidth })
+            }
+
             canvas.renderAll();
         }
     }
