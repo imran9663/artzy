@@ -1,4 +1,4 @@
-import { Gradient } from "fabric";
+import { Gradient, Rect } from "fabric";
 import React, { useEffect, useState } from "react";
 import { Accordion, Dropdown } from "react-bootstrap";
 import { BiChevronDown, BiFontFamily, BiSolidCircle, BiSolidRectangle, BiSolidSquare } from "react-icons/bi";
@@ -302,30 +302,57 @@ const Setting = ({ canvas }) => {
         if (selectedObject) {
             const objWidth = selectedObject.width;
             const objHeight = selectedObject.height;
+            const objScaleX = selectedObject.scaleX;
+            const objScaleY = selectedObject.scaleY;
             const zoom = canvas.getZoom();
-
+            const scaledWidth = objWidth * objScaleX
+            const scaledHeight = objHeight * objScaleY
             const canvasWidth = canvas.getWidth() / zoom;
             const canvasHeight = canvas.getHeight() / zoom;
 
-            const top = selectedObject.top;
-            const left = selectedObject.left;
-            const right = left + (selectedObject.width * selectedObject.scaleX);
-            const bottom = top + (selectedObject.height * selectedObject.scaleY);
-
-            const centerX = left + (selectedObject.width * selectedObject.scaleX) / 2;
-            const centerY = top + (selectedObject.height * selectedObject.scaleY) / 2;
             if (id === 'originX' && value === 'left') {
                 //horizontal left
                 selectedObject.set({ left: 0 });
                 setShapeObject({ ...shapeObject, left: 0 })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
             }
             if (id === 'originX' && value === 'right') {
                 //horizontal right
-                selectedObject.set({ left: 0 });
-                setShapeObject({ ...shapeObject, left: canvasWidth - objWidth })
-            }
+                selectedObject.set({ left: (canvasWidth - (scaledWidth)) });
+                setShapeObject({ ...shapeObject, left: (canvasWidth - (scaledWidth)) })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
 
-            canvas.renderAll();
+            } if (id === 'originX' && value === 'center') {
+                //horizontal right
+                selectedObject.set({ left: (canvasWidth / 2) - ((scaledWidth) / 2) });
+                setShapeObject({ ...shapeObject, left: (canvasWidth / 2) - ((scaledWidth) / 2) })
+
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originY' && value === 'top') {
+                //horizontal left
+                selectedObject.set({ top: 0 });
+                setShapeObject({ ...shapeObject, top: 0 })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originY' && value === 'center') {
+                //horizontal left
+                selectedObject.set({ top: (canvasHeight / 2) - (scaledHeight / 2) });
+                setShapeObject({ ...shapeObject, top: (canvasHeight / 2) - (scaledHeight / 2) })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originY' && value === 'bottom') {
+                //horizontal right
+                selectedObject.set({ top: (canvasHeight - scaledHeight) });
+                setShapeObject({ ...shapeObject, top: (canvasHeight - scaledHeight) })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
         }
     }
     return (

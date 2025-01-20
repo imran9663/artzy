@@ -4,7 +4,7 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { LuShapes } from 'react-icons/lu';
 import * as Tb from 'react-icons/tb';
 import * as Icons from '../../Assets/Icons';
-import { createStar, generatePolygonPoints } from '../../helpers/canvasHelpers';
+import { bringObjToCenter, createBlobWithImage, createStar, generatePolygonPoints } from '../../helpers/canvasHelpers';
 import { generateRandomHex } from '../../Utils/common';
 import { elementShapes } from '../../Utils/Constants';
 import './styles.css';
@@ -32,16 +32,12 @@ const Elements = ({ canvas }) => {
             switch (shape) {
                 case "Circle":
                     fabricShape = new fabric.Circle({
-                        left: x,
-                        top: y,
                         radius: size / 2,
                         fill: defaultFill,
                     });
                     break;
                 case "Square":
                     fabricShape = new fabric.Rect({
-                        left: x,
-                        top: y,
                         width: size,
                         height: size,
                         fill: defaultFill,
@@ -51,8 +47,6 @@ const Elements = ({ canvas }) => {
                 case "Rectangle":
                     fabricShape = new fabric.Rect({
 
-                        left: x,
-                        top: y,
                         width: size * 1.2,
                         height: size,
                         fill: defaultFill,
@@ -62,8 +56,6 @@ const Elements = ({ canvas }) => {
                 case "Triangle":
                     fabricShape = new fabric.Triangle({
 
-                        left: x,
-                        top: y,
                         width: size,
                         height: size,
                         fill: defaultFill,
@@ -79,9 +71,6 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: size / 2 },
                         ],
                         {
-
-                            left: x,
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -97,8 +86,7 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -115,8 +103,7 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -134,8 +121,7 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -144,8 +130,6 @@ const Elements = ({ canvas }) => {
                 case "Heptagon":
                     fabricShape = new fabric.Polygon(generatePolygonPoints(7, size / 2), {
 
-                        left: x,
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -153,8 +137,6 @@ const Elements = ({ canvas }) => {
                 case "Octagon":
                     fabricShape = new fabric.Polygon(generatePolygonPoints(8, size / 2), {
 
-                        left: x,
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -162,8 +144,6 @@ const Elements = ({ canvas }) => {
                 case "Nonagon":
                     fabricShape = new fabric.Polygon(generatePolygonPoints(9, size / 2), {
 
-                        left: x,
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -173,8 +153,7 @@ const Elements = ({ canvas }) => {
                         generatePolygonPoints(10, size / 2),
                         {
 
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -190,8 +169,7 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -207,8 +185,7 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -224,8 +201,7 @@ const Elements = ({ canvas }) => {
                         ],
                         {
                             d: shape,
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -238,9 +214,6 @@ const Elements = ({ canvas }) => {
                             { x: 30, y: 40 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -249,9 +222,6 @@ const Elements = ({ canvas }) => {
                     fabricShape = new fabric.Triangle({
                         width: 50,
                         height: 50,
-                        left: x,
-
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -263,9 +233,6 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 43 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -278,9 +245,6 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 50 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -293,9 +257,6 @@ const Elements = ({ canvas }) => {
                             { x: 20, y: 50 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -308,9 +269,6 @@ const Elements = ({ canvas }) => {
                             { x: 30, y: 40 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -319,9 +277,6 @@ const Elements = ({ canvas }) => {
                 case "Pentagram":
                     const pentVertices = createStar(5, size);
                     fabricShape = new fabric.Polygon(pentVertices, {
-                        left: x,
-
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -329,9 +284,6 @@ const Elements = ({ canvas }) => {
                     // Comment: Hexagram is a six-pointed star and can be created by combining two triangles.
                     const vertices = createStar(6, size);
                     fabricShape = new fabric.Polygon(vertices, {
-                        left: x,
-
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -339,9 +291,6 @@ const Elements = ({ canvas }) => {
                     // Comment: Octagram is an eight-pointed star and can be created with overlapping squares.
                     const eightVertices = createStar(8, size);
                     fabricShape = new fabric.Polygon(eightVertices, {
-                        left: x,
-
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -349,18 +298,12 @@ const Elements = ({ canvas }) => {
                     fabricShape = new fabric.Ellipse({
                         rx: 25,
                         ry: 15,
-                        left: x,
-
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
                 case "Parabola":
                     // Comment: Parabola is not natively supported in Fabric.js and requires a custom path.
                     fabricShape = new fabric.Path("M 0 50 Q 25 0 50 50", {
-                        left: x,
-
-                        top: y,
                         fill: "",
                         stroke: defaultFill,
                         strokeWidth: 2,
@@ -369,9 +312,6 @@ const Elements = ({ canvas }) => {
                 case "Hyperbola":
                     // Comment: Hyperbola is not natively supported in Fabric.js and requires a custom path.
                     fabricShape = new fabric.Path("M 0 25 Q 25 50 50 25", {
-                        left: x,
-
-                        top: y,
                         fill: "",
                         stroke: defaultFill,
                         strokeWidth: 2,
@@ -389,9 +329,6 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 30 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -439,9 +376,6 @@ const Elements = ({ canvas }) => {
                     break;
                 case "Heart":
                     fabricShape = new fabric.Path("M 0 30 Q 25 0 50 30 T 0 30 Z", {
-                        left: x,
-
-                        top: y,
                         fill: defaultFill,
                     });
                     break;
@@ -454,9 +388,6 @@ const Elements = ({ canvas }) => {
                             { x: 10, y: 40 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
                             fill: defaultFill,
                         }
                     );
@@ -472,8 +403,7 @@ const Elements = ({ canvas }) => {
                             { x: size - 10, y: 10 },
                         ],
                         {
-                            left: x,
-                            top: y,
+
                             fill: "transparent",
                             stroke: "black",
                             strokeWidth: 2,
@@ -493,8 +423,7 @@ const Elements = ({ canvas }) => {
                             { x: size - 10, y: 10 },
                         ],
                         {
-                            left: x,
-                            top: y,
+
                             fill: "transparent",
                             stroke: "black",
                             strokeWidth: 2,
@@ -518,8 +447,7 @@ const Elements = ({ canvas }) => {
                             { x: 10, y: 10 },
                         ],
                         {
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
                         }
                     );
@@ -538,8 +466,7 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 20 },
                         ],
                         {
-                            left: x,
-                            top: y,
+
                             fill: defaultFill,
 
                         }
@@ -551,8 +478,7 @@ const Elements = ({ canvas }) => {
                     break;
             }
             if (fabricShape) {
-                canvas.add(fabricShape);
-                canvas.renderAll();
+                bringObjToCenter(canvas, fabricShape);
                 canvas.setActiveObject(fabricShape);
                 handleObjectMoving(canvas, fabricShape, guideLines, setGuideLines);
             }
@@ -626,56 +552,46 @@ const Elements = ({ canvas }) => {
     // }, [localAssets])
     const handleClickOnAddTextBox = (id = 'normal') => {
         if (canvas) {
-            let x = (canvas.getWidth()) / 2; // Starting X coordinate
-            let y = (canvas.getHeight()) / 2;; // Starting Y coordinate
+            let fabricText = {}
             switch (id) {
                 case 'normal':
-                    const iText = new fabric.IText('Add your Text here', {
-                        left: x,
-                        top: y,
+                    fabricText = new fabric.IText('Add your Text here', {
                         fontSize: 16,
                         fill: '#000000', fontWeight: 'normal', fontFamily: "Roboto"
                     })
-                    canvas.add(iText);
-                    canvas.setActiveObject(iText);
+
                     break;
                 case 'heading':
-                    const headingIText = new fabric.IText('Heading Text', {
-                        left: x,
-                        top: y,
+                    fabricText = new fabric.IText('Heading Text', {
                         fontSize: 40,
                         fill: '#000000',
                         fontWeight: 'bold', fontFamily: "Roboto"
                     })
-                    canvas.add(headingIText); canvas.setActiveObject(headingIText);
+
                     break;
                 case 'subHeading':
-                    const subHeadingIText = new fabric.IText('Sub Heading Text', {
-                        left: x,
-                        top: y,
+                    fabricText = new fabric.IText('Sub Heading Text', {
                         fontSize: 28,
                         fill: '#000000',
                         fontWeight: 'bold', fontFamily: "Roboto"
                     })
-                    canvas.add(subHeadingIText); canvas.setActiveObject(subHeadingIText);
+
                     break;
                 case 'paragraph':
-                    const textBox = new fabric.Textbox('Add your Paragraph Here', {
-                        left: x,
-                        top: y,
+                    fabricText = new fabric.Textbox('Add your Paragraph Here', {
                         width: 250,
                         fontSize: 16,
                         fill: '#000000',
                         fontWeight: 'bold', fontFamily: "Roboto"
                     })
-                    canvas.add(textBox);
-                    canvas.setActiveObject(textBox);
+
                     break;
                 default:
                     break;
             }
-
+            bringObjToCenter(canvas, fabricText);
             canvas.renderAll()
+            canvas.setActiveObject(fabricText)
         }
     }
     return (
@@ -714,9 +630,7 @@ const Elements = ({ canvas }) => {
                     <Tb.TbPencilBolt />
                 </button>
                 <button
-                    id={"TEXT"}
-                    // onMouseOver={() => handleSideBarClick('text')}
-                    onClick={() => handleSideBarClick('text')}
+                    onClick={() => createBlobWithImage(canvas, "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844226_960_720.png")}
                     className={`elementBtn`}
                 >
                     <Tb.TbBackground />
