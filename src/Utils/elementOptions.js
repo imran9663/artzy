@@ -85,10 +85,84 @@ export const rectOptions = {
   stateProperties: [ /* Array of properties to monitor for changes */],
 };
 
+export const textOptions = {
+  // Content and Text
+  text: "Sample Text", // The text content
+  fontSize: 40, // Font size in pixels
+  fontWeight: "normal", // Font weight ("normal", "bold", or a number like 400)
+  fontFamily: "Arial", // Font family
+  fontStyle: "normal", // Font style ("normal", "italic", "oblique")
+  lineHeight: 1.16, // Line height (multiplier)
+  textAlign: "left", // Text alignment ("left", "center", "right", "justify")
+  fill: "#000000", // Fill color for the text
+  stroke: null, // Stroke color for the text
+  strokeWidth: 0, // Width of the text stroke
+  textBackgroundColor: "", // Background color behind the text
+  charSpacing: 0, // Character spacing in 1/1000 units of em
+  direction: "ltr", // Text direction ("ltr", "rtl")
+
+  // Advanced Text Styling
+  styles: {}, // Object to apply styles to specific characters or ranges
+  underline: false, // Whether the text is underlined
+  overline: false, // Whether the text has an overline
+  linethrough: false, // Whether the text has a line-through
+  shadow: null, // Shadow for the text (string or shadow object)
+
+  // Editing and Interactivity
+  editable: true, // Whether the text is editable (fabric.IText)
+  cursorColor: "#000000", // Color of the editing cursor
+  cursorWidth: 2, // Width of the editing cursor
+  cursorDelay: 1000, // Delay before cursor starts blinking (ms)
+  cursorDuration: 600, // Duration of a single cursor blink (ms)
+  selectionColor: "rgba(17, 119, 255, 0.3)", // Background color of text selection
+  useNative: true, // Use native text editing features
+  selectionStart: 0, // Start index of the selected text
+  selectionEnd: 0, // End index of the selected text
+
+  // Positioning and Dimensions
+  left: 0, // X-coordinate on the canvas
+  top: 0, // Y-coordinate on the canvas
+  width: null, // Width of the textbox (fabric.Textbox)
+  height: null, // Height of the textbox (fabric.Textbox)
+  angle: 0, // Rotation angle in degrees
+  scaleX: 1, // Horizontal scaling factor
+  scaleY: 1, // Vertical scaling factor
+  skewX: 0, // Skew along the X-axis
+  skewY: 0, // Skew along the Y-axis
+
+  // Object Constraints
+  flipX: false, // Flip horizontally
+  flipY: false, // Flip vertically
+  lockMovementX: false, // Lock horizontal movement
+  lockMovementY: false, // Lock vertical movement
+  lockRotation: false, // Lock rotation
+  lockScalingX: false, // Lock horizontal scaling
+  lockScalingY: false, // Lock vertical scaling
+  lockSkewingX: false, // Lock skewing on X-axis
+  lockSkewingY: false, // Lock skewing on Y-axis
+  lockScalingFlip: false, // Prevent flipping while scaling
+
+  // Border and Controls
+  hasBorders: true, // Display borders when selected
+  hasControls: true, // Display controls for scaling and rotation
+  cornerColor: "blue", // Color of the selection corners
+  borderColor: "red", // Color of the selection border
+  transparentCorners: true, // Transparent corners for selection
+
+  // Rendering and Visibility
+  visible: true, // Whether the text is visible
+  opacity: 1, // Opacity (0 = fully transparent, 1 = fully opaque)
+
+  // Clipping and Advanced Properties
+  clipPath: null, // Clipping object
+  dirty: true, // Marks the object as needing a re-render
+  cacheProperties: [], // Properties to cache for performance
+  stateProperties: [], // Properties to track for changes
+};
 
 export const elementStylesWhenSelected = {
   borderColor: "#ffb703",
-  cornerColor: "#ffb703",
+  cornerColor: "transparent",
   cornerStrokeColor: "#ffb703",
   cornerSize: 10,
   cornerStyle: "circle",

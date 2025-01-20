@@ -1,22 +1,23 @@
-import { Gradient } from "fabric";
+import { Gradient, Rect } from "fabric";
 import React, { useEffect, useState } from "react";
 import { Accordion, Dropdown } from "react-bootstrap";
-import { BiChevronDown, BiSolidCircle, BiSolidRectangle, BiSolidSquare } from "react-icons/bi";
-import { MdBlurOn } from "react-icons/md";
+import { BiChevronDown, BiFontFamily, BiSolidCircle, BiSolidRectangle, BiSolidSquare } from "react-icons/bi";
+import * as Md from "react-icons/md";
 import { PiAngle } from "react-icons/pi";
 import { RxBorderWidth } from "react-icons/rx";
-import { TbFlipHorizontal, TbFlipVertical, TbJoinBevel, TbJoinRound, TbJoinStraight, TbPaletteFilled, TbRadiusTopLeft, TbSkewX, TbSkewY, TbSquareOff } from "react-icons/tb";
+import * as Tb from "react-icons/tb";
 import { convertPaletteToFabricGradientV2 } from "../../Utils/common";
 import { COLOR_TYPE, SHAPES } from "../../Utils/Constants";
 import ColorCodeInput from "../UtilComponents/ColorCodeInput/Index";
 import NewInputField from "../UtilComponents/NewInputField/Index";
 import RangeSlider from "../UtilComponents/RangeSlider/Index";
 import "./styles.css";
+import CustomDropDown from "../UtilComponents/CustomDropDown";
 
 const Setting = ({ canvas }) => {
     const [selectedObject, setSelectedObject] = useState(null);
     const [shapeObject, setShapeObject] = useState(null);
-
+    const [selectedFont, setSelectedFont] = useState("Roboto");
     useEffect(() => {
         if (canvas) {
             canvas.on("selection:created", (event) => {
@@ -37,7 +38,10 @@ const Setting = ({ canvas }) => {
             });
         }
     }, [canvas]);
-
+    const handleFontChange = (font) => {
+        updateFont(font);
+        setSelectedFont(() => font);
+    };
 
     const [shadowObj, setShadowObj] = useState({
         x: 0,
@@ -72,8 +76,6 @@ const Setting = ({ canvas }) => {
 
     const handleColorChange = (id, type, value) => {
         if (type === COLOR_TYPE.solid) {
-
-
             if (selectedObject) {
                 if (id === "shadowColor") {
                     setShadowObj({ ...shadowObj, color: value })
@@ -95,12 +97,11 @@ const Setting = ({ canvas }) => {
         }
 
     };
-    const handleOpacityChange = (e) => {
-        const { value } = e.target;
-        // setOpacity(value);
+    const handleSlideChange = (e) => {
+        const { value, id } = e.target;
         if (selectedObject) {
-            selectedObject.set({ opacity: value });
-            setShapeObject({ ...shapeObject, opacity: value })
+            selectedObject.set({ [id]: value });
+            setShapeObject({ ...shapeObject, [id]: value })
             canvas.renderAll();
         }
     };
@@ -188,7 +189,6 @@ const Setting = ({ canvas }) => {
 
     }
     const handleValueInputChange = (id, value) => {
-        console.log("id, value", id, value);
 
         if (selectedObject) {
             if (id === 'strokeDashArray' && value !== "") {
@@ -211,16 +211,185 @@ const Setting = ({ canvas }) => {
         const { id, value } = e.target
         setShadowObj({ ...shadowObj, [id]: value })
     }
+    const updateFont = async (font) => {
+        try {
+            await document.fonts.load(`16px ${font}`);
+            if (selectedObject) {
+                selectedObject.set({ "fontFamily": font });
+                canvas.renderAll();
+            }
+        } catch (error) {
+            console.log(`Failed to load  ${font}:`, error);
+        }
+
+
+    }
+    const isTextType = (type) => {
+        return type.includes(SHAPES.iText) || type.includes(SHAPES.textbox)
+    }
+    const handleChangeFontSize = (id) => {
+        const currentFontSize = selectedObject.get('fontSize');
+
+        switch (id) {
+            case 'inc':
+                if (
+                    selectedObject
+                ) {
+                    selectedObject.set({ fontSize: currentFontSize + 1 });
+                    setShapeObject({ ...shapeObject, fontSize: currentFontSize + 1 })
+                    canvas.renderAll();
+                }
+                break;
+            case 'dec':
+                if (
+                    selectedObject
+                ) {
+                    selectedObject.set({ fontSize: currentFontSize - 1 });
+                    setShapeObject({ ...shapeObject, fontSize: currentFontSize - 1 })
+                    canvas.renderAll();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    const handleFontBtnClick = (id) => {
+        if (selectedObject) {
+            const getFontProp = selectedObject.get(id)
+            switch (id) {
+                case 'fontWeight':
+                    if (getFontProp === 'normal') {
+                        selectedObject.set({ [id]: 'bold' });
+                        setShapeObject({ ...shapeObject, [id]: 'bold' })
+                        canvas.renderAll();
+                    } else {
+                        selectedObject.set({ [id]: 'normal' });
+                        setShapeObject({ ...shapeObject, [id]: 'normal' })
+                        canvas.renderAll();
+                    }
+                    break;
+                case 'fontStyle':
+                    if (getFontProp === 'normal') {
+                        selectedObject.set({ [id]: 'italic' });
+                        setShapeObject({ ...shapeObject, [id]: 'italic' })
+                        canvas.renderAll();
+                    } else {
+                        selectedObject.set({ [id]: 'normal' });
+                        setShapeObject({ ...shapeObject, [id]: 'normal' })
+                        canvas.renderAll();
+                    }
+                    break;
+                case 'underline':
+                    selectedObject.set({ [id]: !getFontProp });
+                    setShapeObject({ ...shapeObject, [id]: !getFontProp })
+                    canvas.renderAll();
+                    break;
+                case 'linethrough':
+                    selectedObject.set({ [id]: !getFontProp });
+                    setShapeObject({ ...shapeObject, [id]: !getFontProp })
+                    canvas.renderAll();
+                    break;
+            }
+        }
+
+    }
+    const handleAlignmentClick = (value) => {
+        selectedObject.set({ textAlign: value });
+        setShapeObject({ ...shapeObject, textAlign: value })
+        canvas.renderAll();
+    }
+    const handleObjectAlignClick = (id, value) => {
+        if (selectedObject) {
+            const objWidth = selectedObject.width;
+            const objHeight = selectedObject.height;
+            const objScaleX = selectedObject.scaleX;
+            const objScaleY = selectedObject.scaleY;
+            const zoom = canvas.getZoom();
+            const scaledWidth = objWidth * objScaleX
+            const scaledHeight = objHeight * objScaleY
+            const canvasWidth = canvas.getWidth() / zoom;
+            const canvasHeight = canvas.getHeight() / zoom;
+
+            if (id === 'originX' && value === 'left') {
+                //horizontal left
+                selectedObject.set({ left: 0 });
+                setShapeObject({ ...shapeObject, left: 0 })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originX' && value === 'right') {
+                //horizontal right
+                selectedObject.set({ left: (canvasWidth - (scaledWidth)) });
+                setShapeObject({ ...shapeObject, left: (canvasWidth - (scaledWidth)) })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+
+            } if (id === 'originX' && value === 'center') {
+                //horizontal right
+                selectedObject.set({ left: (canvasWidth / 2) - ((scaledWidth) / 2) });
+                setShapeObject({ ...shapeObject, left: (canvasWidth / 2) - ((scaledWidth) / 2) })
+
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originY' && value === 'top') {
+                //horizontal left
+                selectedObject.set({ top: 0 });
+                setShapeObject({ ...shapeObject, top: 0 })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originY' && value === 'center') {
+                //horizontal left
+                selectedObject.set({ top: (canvasHeight / 2) - (scaledHeight / 2) });
+                setShapeObject({ ...shapeObject, top: (canvasHeight / 2) - (scaledHeight / 2) })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+            if (id === 'originY' && value === 'bottom') {
+                //horizontal right
+                selectedObject.set({ top: (canvasHeight - scaledHeight) });
+                setShapeObject({ ...shapeObject, top: (canvasHeight - scaledHeight) })
+                canvas.renderAll();
+                canvas.setActiveObject(selectedObject)
+            }
+        }
+    }
     return (
         <>
             {selectedObject ? (
                 <div className="optionsWrapper">
                     <Accordion defaultActiveKey={['0']} alwaysOpen>
+                        <Accordion.Item eventKey="-1" >
+                            <Accordion.Header>Alignment</Accordion.Header>
+                            <Accordion.Body>
+
+                                <div className="options-row py-1  d-flex gap-3">
+                                    <div className="w-100 d-flex flex-row justify-content-between align-items-center py-2">
+                                        <button onClick={() => handleObjectAlignClick('originX', 'left')} className={`btn btn-sm  ${shapeObject.originX === 'left' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg'}`}><Md.MdAlignHorizontalLeft /></button>
+                                        <button onClick={() => handleObjectAlignClick('originX', 'center')} className={`btn btn-sm  ${shapeObject.originX === 'center' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg'}`}><Md.MdAlignHorizontalCenter /></button>
+                                        <button onClick={() => handleObjectAlignClick('originX', 'right')} className={`btn btn-sm  ${shapeObject.originX === 'right' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg'}`}><Md.MdAlignHorizontalRight /></button>
+                                    </div>
+
+                                </div>
+                                <div className="options-row py-1  d-flex gap-3">
+                                    <div className="w-100 d-flex flex-row justify-content-between align-items-center py-2">
+                                        <button onClick={() => handleObjectAlignClick('originY', 'top')} className={`btn btn-sm  ${shapeObject.originY === 'top' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg'}`}><Md.MdAlignVerticalTop /></button>
+                                        <button onClick={() => handleObjectAlignClick('originY', 'center')} className={`btn btn-sm  ${shapeObject.originY === 'center' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg'}`}><Md.MdAlignVerticalCenter /></button>
+                                        <button onClick={() => handleObjectAlignClick('originY', 'bottom')} className={`btn btn-sm  ${shapeObject.originY === 'bottom' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg'}`}><Md.MdAlignVerticalBottom /></button>
+                                    </div>
+
+                                </div>
+
+                            </Accordion.Body>
+                        </Accordion.Item>
                         <Accordion.Item eventKey="0">
-                            <Accordion.Header>Position</Accordion.Header>
+                            <>
+                                {isTextType(selectedObject.type) ?
+                                    <Accordion.Header>Text Styles</Accordion.Header> : <Accordion.Header>Position</Accordion.Header>}
                             <Accordion.Body>
                                 <div className="pt-1">
-                                    <div className="options-row py-1">
+                                        {/* <div className="options-row py-1">
                                         <NewInputField
                                             handleChange={handleInputChange}
                                             type={"text"}
@@ -239,10 +408,10 @@ const Setting = ({ canvas }) => {
                                             label={"L"}
                                         />
 
-                                    </div>
+                                    </div> */}
 
                                     <div className="options-row">
-                                        {selectedObject.type === SHAPES.rect && <NewInputField
+                                            {!isTextType(selectedObject.type) && selectedObject.type !== SHAPES.circle && <NewInputField
                                             handleChange={handleInputChange}
                                             type={"text"}
                                             label={"W"}
@@ -254,7 +423,7 @@ const Setting = ({ canvas }) => {
                                             Title={'Width'}
                                         />}
 
-                                        {selectedObject.type === SHAPES.rect &&
+                                            {!isTextType(selectedObject.type) && selectedObject.type !== SHAPES.circle &&
                                             <NewInputField
                                             value={shapeObject.height}
                                             name={"height"}
@@ -269,11 +438,11 @@ const Setting = ({ canvas }) => {
 
                                     </div>
                                     <div className="options-row">
-                                        {selectedObject.type === SHAPES.rect &&
+                                            {!isTextType(selectedObject.type) && selectedObject.type !== SHAPES.circle &&
                                             <NewInputField
                                                 handleChange={handleInputChange}
                                                 type={"text"}
-                                                label={<TbRadiusTopLeft />}
+                                            label={<Tb.TbRadiusTopLeft />}
                                                 className="form-control  input"
                                                 value={shapeObject.rx}
                                                 name={"cornerRadius"}
@@ -281,7 +450,7 @@ const Setting = ({ canvas }) => {
                                                 toolTip
                                                 Title={'Corner Radius'}
                                             />}
-                                        {selectedObject.type === SHAPES.circle && (
+                                            {!isTextType(selectedObject.type) && selectedObject.type === SHAPES.circle && (
                                             <NewInputField
                                                 value={shapeObject.radius}
                                                 name={"radius"}
@@ -302,23 +471,85 @@ const Setting = ({ canvas }) => {
                                             id={"angle"}
                                             toolTip
                                             Title={'Rotation'}
-                                        />
+                                            />
+                                        </div>
+                                        {isTextType(selectedObject.type) && <div className="options-row py-1  d-flex gap-3">
+                                            <div className="w-50">
+                                                <CustomDropDown selectedFont={selectedFont} onSelect={handleFontChange} />
+                                            </div>
+                                            <div className="w-50 d-flex flex-row ">
+                                                <button onClick={() => { handleChangeFontSize('dec') }} className="btn btn-sm font-dark-bg p-0 px-1 "><Tb.TbMinus /></button>
+                                                <input type="number" value={shapeObject.fontSize} onChange={handleInputChange} className="input  input-number-type" name="" id="fontSize" />
+                                                <button onClick={() => { handleChangeFontSize('inc') }} className="btn btn-sm font-dark-bg p-0 px-1 "><Tb.TbPlus /></button>
+                                            </div>
+                                        </div>
+                                        }
+                                        <div className="options-row">
+                                            <ColorCodeInput label={isTextType(selectedObject.type) ? <Tb.TbTextColor /> : <Tb.TbPaletteFilled />} id={'fill'} showGradientPanel={true} value={shapeObject.fill} handleChange={handleColorChange} />
+                                        </div>
+                                        {isTextType(selectedObject.type) &&
+                                            <>
+                                                <div className="options-row py-1  d-flex gap-3">
+                                                    <div className="w-100 d-flex flex-row justify-content-between align-items-center py-2">
+                                                        <button onClick={() => handleFontBtnClick('fontWeight')} className={`btn btn-sm ${shapeObject.fontWeight === 'bold' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg '}`}><Tb.TbBold /></button>
+                                                        <button onClick={() => handleFontBtnClick('fontStyle')} className={`btn btn-sm ${shapeObject.fontStyle === 'italic' ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg '}`}><Tb.TbItalic /></button>
+                                                        <button onClick={() => handleFontBtnClick('underline')} className={`btn btn-sm ${shapeObject.underline ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg '}`}><Tb.TbUnderline /></button>
+                                                        <button onClick={() => handleFontBtnClick('linethrough')} className={`btn btn-sm ${shapeObject.linethrough ? 'btn-warning text-dark' : 'btn-outline-warning font-dark-bg '}`}><Tb.TbStrikethrough /></button>
+                                                    </div>
+                                                </div>
+                                                <div className="options-row">
+                                                    <ColorCodeInput label={<Tb.TbSquareRoundedLetterA />} id={'textBackgroundColor'} showGradientPanel={false} value={shapeObject.textBackgroundColor} handleChange={handleColorChange} />
+                                                </div>
+                                            </>
+                                        }
 
+                                        {isTextType(selectedObject.type) &&
+                                            <>
+                                                <div className="options-row py-1  d-flex gap-3">
 
-                                    </div>
-                                    <div className="options-row">
-                                        <ColorCodeInput label={<TbPaletteFilled />} id={'fill'} showGradientPanel={true} value={shapeObject.fill} handleChange={handleColorChange} />
-                                    </div>
+                                                <div className="w-100 d-flex flex-row justify-content-between align-items-center py-2">
+                                                    <button onClick={() => handleAlignmentClick('left')} className="btn btn-sm font-dark-bg btn-outline-warning"><Tb.TbAlignLeft2 /></button>
+                                                    <button onClick={() => handleAlignmentClick('center')} className="btn btn-sm font-dark-bg btn-outline-warning"><Tb.TbAlignCenter /></button>
+                                                    <button onClick={() => handleAlignmentClick('right')} className="btn btn-sm font-dark-bg btn-outline-warning"><Tb.TbAlignRight2 /></button>
+                                                    <button onClick={() => handleAlignmentClick('justify')} className="btn btn-sm font-dark-bg btn-outline-warning"><Tb.TbAlignJustified /></button>
+                                                </div>
+
+                                            </div>
+                                            <div className="options-row">
+                                                <RangeSlider
+                                                    name={"Line height"}
+                                                    id={"lineHeight"}
+                                                    label={<Tb.TbLineHeight />}
+                                                    min={0}
+                                                    max={2.5}
+                                                    steps={0.01}
+                                                    value={shapeObject.lineHeight}
+                                                    handleChange={handleSlideChange}
+                                                />
+                                            </div>
+                                            <div className="options-row">
+                                                <RangeSlider
+                                                    name={'Character Spacing'}
+                                                    id={"charSpacing"}
+                                                    label={<Tb.TbLetterSpacing />}
+                                                    min={1}
+                                                    max={1000}
+                                                    steps={10}
+                                                    value={shapeObject.charSpacing}
+                                                    handleChange={handleSlideChange}
+                                                />
+                                            </div>
+                                            </>
+                                        }
                                 </div>
-
-                            </Accordion.Body>
+                                </Accordion.Body></>
                         </Accordion.Item>
                         <Accordion.Item eventKey="1">
                             <Accordion.Header>Border</Accordion.Header>
                             <Accordion.Body>
                                 <div className="pt-1">
                                     <div className="options-row">
-                                        <ColorCodeInput label={<TbPaletteFilled />}
+                                        <ColorCodeInput label={<Tb.TbPaletteFilled />}
                                             id={'stroke'} showGradientPanel={false}
                                             value={shapeObject.stroke}
                                             handleChange={handleColorChange} />
@@ -392,17 +623,17 @@ const Setting = ({ canvas }) => {
                                             <button onClick={() => handleValueInputChange('strokeLineJoin', 'miter')} id='strokeLineJoin' name={'miter'}
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title={"Miter Join"} className="btn  text-bg-dark">
-                                                <TbJoinStraight />
+                                                <Tb.TbJoinStraight />
                                             </button>
                                             <button onClick={() => handleValueInputChange('strokeLineJoin', 'round')} id='strokeLineJoin' name={'round'}
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title={"Round Join"} className="btn text-bg-dark">
-                                                <TbJoinRound />
+                                                <Tb.TbJoinRound />
                                             </button>
                                             <button onClick={() => handleValueInputChange('strokeLineJoin', 'bevel')} id='strokeLineJoin' name={'bevel'}
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title={"Bevel Join"} className="btn text-bg-dark">
-                                                <TbJoinBevel />
+                                                <Tb.TbJoinBevel />
                                             </button>
                                         </div>
                                     </div>
@@ -446,7 +677,7 @@ const Setting = ({ canvas }) => {
                                             id={"blur"}
                                             type={"text"}
                                             handleChange={handleShadowChange}
-                                            label={<MdBlurOn />}
+                                            label={<Md.MdBlurOn />}
                                             toolTip
                                             Title={'Shadow Blur Radius'}
                                         />
@@ -454,7 +685,7 @@ const Setting = ({ canvas }) => {
                                     </div>
                                     <div className="options-row">
 
-                                        <ColorCodeInput label={<TbPaletteFilled />} id={'shadowColor'} showGradientPanel={false} value={shadowObj?.color} handleChange={handleColorChange} />
+                                        <ColorCodeInput label={<Tb.TbPaletteFilled />} id={'shadowColor'} showGradientPanel={false} value={shadowObj?.color} handleChange={handleColorChange} />
 
                                     </div>
                                 </div>
@@ -500,7 +731,7 @@ const Setting = ({ canvas }) => {
                                             id={"skewX"}
                                             type={"text"}
                                             handleChange={handleInputChange}
-                                            label={<TbSkewX />}
+                                            label={<Tb.TbSkewX />}
                                             toolTip
                                             Title={'Skew Horizontal'}
                                         />
@@ -512,7 +743,7 @@ const Setting = ({ canvas }) => {
                                             id={"skewY"}
                                             type={"text"}
                                             handleChange={handleInputChange}
-                                            label={<TbSkewY />}
+                                            label={<Tb.TbSkewY />}
                                             toolTip
                                             Title={'Skew Horizontal'}
                                         />
@@ -528,7 +759,7 @@ const Setting = ({ canvas }) => {
                                                 title={"Flip Horizontal"}
                                                 id="flipX"
                                                 className={shapeObject.flipX ? "btn  bg-warning text-dark" : "btn  text-bg-dark"}>
-                                                <TbFlipHorizontal />
+                                                <Tb.TbFlipHorizontal />
                                             </button>
                                             <button
                                                 onClick={() => handleValueInputChange('flipY', !shapeObject.flipY)}
@@ -536,7 +767,7 @@ const Setting = ({ canvas }) => {
                                                 title={"Flip Vertical"}
                                                 id="flipY"
                                                 className={shapeObject.flipY ? "btn  bg-warning text-dark" : "btn  text-bg-dark"}>
-                                                <TbFlipVertical />
+                                                <Tb.TbFlipVertical />
                                             </button>
 
                                         </div>
@@ -555,7 +786,7 @@ const Setting = ({ canvas }) => {
                             max={1}
                             steps={0.01}
                             value={shapeObject.opacity}
-                            handleChange={handleOpacityChange}
+                            handleChange={handleSlideChange}
                         />
                     </div>
                 </div>
@@ -563,7 +794,7 @@ const Setting = ({ canvas }) => {
                 <>
                     <div className="noShape-selected d-flex flex-column  justify-content-center align-items-center">
                         <div className="noShape-icon ">
-                            <TbSquareOff />
+                            <Tb.TbSquareOff />
                         </div>
                         <p className="noShape-selected-heading  text-center ">No Object Selected</p>
                         <p className="noShape-selected-helper text-center "> Select the object to view Styles</p>

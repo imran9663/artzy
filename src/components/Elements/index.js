@@ -4,14 +4,17 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { LuShapes } from 'react-icons/lu';
 import * as Tb from 'react-icons/tb';
 import * as Icons from '../../Assets/Icons';
-import { createStar, generatePolygonPoints } from '../../helpers/canvasHelpers';
+import { bringObjToCenter, createBlobWithImage, createStar, generatePolygonPoints } from '../../helpers/canvasHelpers';
 import { generateRandomHex } from '../../Utils/common';
 import { elementShapes } from '../../Utils/Constants';
 import './styles.css';
+import { CiText } from 'react-icons/ci';
+import { handleObjectMoving } from '../../helpers/snappingHelper';
 const Elements = ({ canvas }) => {
     const [imageOptionsTabKey, setImageOptionsTabKey] = useState("local");
-    const [defaultShapeFill] = useState(generateRandomHex())
+    const [defaultFill] = useState(generateRandomHex())
     const [localAssets, setLocalAssets] = useState([]);
+    const [guideLines, setGuideLines] = useState([]);
     const [sidebarOptions, setSideBarOptions] = useState({
         elements: false,
         image: false,
@@ -21,49 +24,41 @@ const Elements = ({ canvas }) => {
     const handleElementBtnClick = (shape) => {
 
         if (canvas) {
-            const size = (canvas.getWidth() + canvas.getHeight() / 2) * 0.3; // Default size for shapes
+            // const size = Math.round((canvas.getWidth() + canvas.getHeight() / 2) * 0.25); // Default size for shapes
+            const size = 100;
             let x = (canvas.getWidth() - size) / 2; // Starting X coordinate
             let y = (canvas.getHeight() - size) / 2;; // Starting Y coordinate
             let fabricShape;
             switch (shape) {
                 case "Circle":
                     fabricShape = new fabric.Circle({
-                        left: x,
-                        top: y,
                         radius: size / 2,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Square":
                     fabricShape = new fabric.Rect({
-
-                        left: x,
-                        top: y,
                         width: size,
                         height: size,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
                 case "Rectangle":
                     fabricShape = new fabric.Rect({
 
-                        left: x,
-                        top: y,
                         width: size * 1.2,
                         height: size,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
                 case "Triangle":
                     fabricShape = new fabric.Triangle({
 
-                        left: x,
-                        top: y,
                         width: size,
                         height: size,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -76,10 +71,7 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: size / 2 },
                         ],
                         {
-
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -94,9 +86,8 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -112,9 +103,8 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -131,9 +121,8 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -141,27 +130,21 @@ const Elements = ({ canvas }) => {
                 case "Heptagon":
                     fabricShape = new fabric.Polygon(generatePolygonPoints(7, size / 2), {
 
-                        left: x,
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
                 case "Octagon":
                     fabricShape = new fabric.Polygon(generatePolygonPoints(8, size / 2), {
 
-                        left: x,
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
                 case "Nonagon":
                     fabricShape = new fabric.Polygon(generatePolygonPoints(9, size / 2), {
 
-                        left: x,
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
 
@@ -170,9 +153,8 @@ const Elements = ({ canvas }) => {
                         generatePolygonPoints(10, size / 2),
                         {
 
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -187,9 +169,8 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -204,9 +185,8 @@ const Elements = ({ canvas }) => {
                         ],
                         {
 
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -221,9 +201,8 @@ const Elements = ({ canvas }) => {
                         ],
                         {
                             d: shape,
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -235,10 +214,7 @@ const Elements = ({ canvas }) => {
                             { x: 30, y: 40 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -246,10 +222,7 @@ const Elements = ({ canvas }) => {
                     fabricShape = new fabric.Triangle({
                         width: 50,
                         height: 50,
-                        left: x,
-
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "EquilateralTriangle":
@@ -260,10 +233,7 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 43 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -275,10 +245,7 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 50 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -290,10 +257,7 @@ const Elements = ({ canvas }) => {
                             { x: 20, y: 50 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -305,10 +269,7 @@ const Elements = ({ canvas }) => {
                             { x: 30, y: 40 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -316,61 +277,43 @@ const Elements = ({ canvas }) => {
                 case "Pentagram":
                     const pentVertices = createStar(5, size);
                     fabricShape = new fabric.Polygon(pentVertices, {
-                        left: x,
-
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Hexagram":
                     // Comment: Hexagram is a six-pointed star and can be created by combining two triangles.
                     const vertices = createStar(6, size);
                     fabricShape = new fabric.Polygon(vertices, {
-                        left: x,
-
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Octagram":
                     // Comment: Octagram is an eight-pointed star and can be created with overlapping squares.
                     const eightVertices = createStar(8, size);
                     fabricShape = new fabric.Polygon(eightVertices, {
-                        left: x,
-
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Ellipse":
                     fabricShape = new fabric.Ellipse({
                         rx: 25,
                         ry: 15,
-                        left: x,
-
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Parabola":
                     // Comment: Parabola is not natively supported in Fabric.js and requires a custom path.
                     fabricShape = new fabric.Path("M 0 50 Q 25 0 50 50", {
-                        left: x,
-
-                        top: y,
                         fill: "",
-                        stroke: defaultShapeFill,
+                        stroke: defaultFill,
                         strokeWidth: 2,
                     });
                     break;
                 case "Hyperbola":
                     // Comment: Hyperbola is not natively supported in Fabric.js and requires a custom path.
                     fabricShape = new fabric.Path("M 0 25 Q 25 50 50 25", {
-                        left: x,
-
-                        top: y,
                         fill: "",
-                        stroke: defaultShapeFill,
+                        stroke: defaultFill,
                         strokeWidth: 2,
                     });
                     break;
@@ -386,10 +329,7 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 30 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -401,7 +341,7 @@ const Elements = ({ canvas }) => {
                                 radius: 20,
                                 left: 10,
                                 top: 10,
-                                fill: defaultShapeFill,
+                                fill: defaultFill,
                             }),
                             new fabric.Circle({
                                 radius: 15,
@@ -421,14 +361,14 @@ const Elements = ({ canvas }) => {
                                 height: 40,
                                 left: 15,
                                 top: 0,
-                                fill: defaultShapeFill,
+                                fill: defaultFill,
                             }),
                             new fabric.Rect({
                                 width: 40,
                                 height: 10,
                                 left: 0,
                                 top: 15,
-                                fill: defaultShapeFill,
+                                fill: defaultFill,
                             }),
                         ],
                         { left: x, top: y }
@@ -436,10 +376,7 @@ const Elements = ({ canvas }) => {
                     break;
                 case "Heart":
                     fabricShape = new fabric.Path("M 0 30 Q 25 0 50 30 T 0 30 Z", {
-                        left: x,
-
-                        top: y,
-                        fill: defaultShapeFill,
+                        fill: defaultFill,
                     });
                     break;
                 case "Quadrilateral":
@@ -451,10 +388,7 @@ const Elements = ({ canvas }) => {
                             { x: 10, y: 40 },
                         ],
                         {
-                            left: x,
-
-                            top: y,
-                            fill: defaultShapeFill,
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -469,8 +403,7 @@ const Elements = ({ canvas }) => {
                             { x: size - 10, y: 10 },
                         ],
                         {
-                            left: x,
-                            top: y,
+
                             fill: "transparent",
                             stroke: "black",
                             strokeWidth: 2,
@@ -490,8 +423,7 @@ const Elements = ({ canvas }) => {
                             { x: size - 10, y: 10 },
                         ],
                         {
-                            left: x,
-                            top: y,
+
                             fill: "transparent",
                             stroke: "black",
                             strokeWidth: 2,
@@ -515,9 +447,8 @@ const Elements = ({ canvas }) => {
                             { x: 10, y: 10 },
                         ],
                         {
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
                         }
                     );
                     break;
@@ -535,9 +466,8 @@ const Elements = ({ canvas }) => {
                             { x: 0, y: 20 },
                         ],
                         {
-                            left: x,
-                            top: y,
-                            fill: defaultShapeFill,
+
+                            fill: defaultFill,
 
                         }
                     );
@@ -548,11 +478,12 @@ const Elements = ({ canvas }) => {
                     break;
             }
             if (fabricShape) {
-                canvas.add(fabricShape);
-                canvas.renderAll();
+                bringObjToCenter(canvas, fabricShape);
                 canvas.setActiveObject(fabricShape);
+                handleObjectMoving(canvas, fabricShape, guideLines, setGuideLines);
             }
         }
+        handleSideBarClick("elements")
     };
     const handleChangeInputBtnClick = (e) => {
         const input = document.createElement('input');
@@ -590,12 +521,12 @@ const Elements = ({ canvas }) => {
             const canvasH = canvas.getHeight();
             const scale = Math.min(canvasW / imgW, canvasH / imgH);
             canvas.renderAll();
-            console.log("ImageOptions", {
-                left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
-                top: Math.abs((canvasW - (imgH * scale)) / 2),
-                width: (imgW * scale),// Center vertically
-                height: (imgH * scale)
-            });
+            // console.log("ImageOptions", {
+            //     left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
+            //     top: Math.abs((canvasW - (imgH * scale)) / 2),
+            //     width: (imgW * scale),// Center vertically
+            //     height: (imgH * scale)
+            // });
 
             const fabricImage = new fabric.FabricImage(imageElement, {
                 left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
@@ -616,10 +547,53 @@ const Elements = ({ canvas }) => {
         });
 
     }
-    useEffect(() => {
-        console.log("localAssets", localAssets);
-    }, [localAssets])
+    // useEffect(() => {
+    //     console.log("localAssets", localAssets);
+    // }, [localAssets])
+    const handleClickOnAddTextBox = (id = 'normal') => {
+        if (canvas) {
+            let fabricText = {}
+            switch (id) {
+                case 'normal':
+                    fabricText = new fabric.IText('Add your Text here', {
+                        fontSize: 16,
+                        fill: '#000000', fontWeight: 'normal', fontFamily: "Roboto"
+                    })
 
+                    break;
+                case 'heading':
+                    fabricText = new fabric.IText('Heading Text', {
+                        fontSize: 40,
+                        fill: '#000000',
+                        fontWeight: 'bold', fontFamily: "Roboto"
+                    })
+
+                    break;
+                case 'subHeading':
+                    fabricText = new fabric.IText('Sub Heading Text', {
+                        fontSize: 28,
+                        fill: '#000000',
+                        fontWeight: 'bold', fontFamily: "Roboto"
+                    })
+
+                    break;
+                case 'paragraph':
+                    fabricText = new fabric.Textbox('Add your Paragraph Here', {
+                        width: 250,
+                        fontSize: 16,
+                        fill: '#000000',
+                        fontWeight: 'bold', fontFamily: "Roboto"
+                    })
+
+                    break;
+                default:
+                    break;
+            }
+            bringObjToCenter(canvas, fabricText);
+            canvas.renderAll()
+            canvas.setActiveObject(fabricText)
+        }
+    }
     return (
         <div className="elements-wrapper">
             <div className="elements">
@@ -630,7 +604,14 @@ const Elements = ({ canvas }) => {
                     className={`elementBtn`}
                 ><LuShapes />
                 </button>
-
+                <button
+                    id={"TEXT"}
+                    // onMouseOver={() => handleSideBarClick('text')}
+                    onClick={() => handleSideBarClick('text')}
+                    className={`elementBtn`}
+                >
+                    <Tb.TbTypography />
+                </button>
                 <button
                     id={"IMAGE"}
                     // onMouseOver={() => handleSideBarClick('image')}
@@ -639,21 +620,20 @@ const Elements = ({ canvas }) => {
                 >
                     <Tb.TbPhotoPlus />
                 </button>
+
                 <button
                     id={"TEXT"}
-                    onMouseOver={() => handleSideBarClick('text')}
-                    onClick={() => handleSideBarClick('text')}
-                    className={`elementBtn`}
-                >
-                    <Tb.TbLetterT />
-                </button>
-                <button
-                    id={"TEXT"}
-                    onMouseOver={() => handleSideBarClick('text')}
+                    // onMouseOver={() => handleSideBarClick('text')}
                     onClick={() => handleSideBarClick('text')}
                     className={`elementBtn`}
                 >
                     <Tb.TbPencilBolt />
+                </button>
+                <button
+                    onClick={() => createBlobWithImage(canvas, "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844226_960_720.png")}
+                    className={`elementBtn`}
+                >
+                    <Tb.TbBackground />
                 </button>
             </div>
             {sidebarOptions.elements && <div className="card imageOptionsCard bg-dark">
@@ -717,7 +697,25 @@ const Elements = ({ canvas }) => {
                     </Tabs>
                 </div>
             )}
+            {sidebarOptions.text && <>
+                <div className="card imageOptionsCard bg-dark">
+                    <div className="shape-elements ">
+                        <div className="px-2">
+                            <button onClick={() => handleClickOnAddTextBox('normal')} className="btn mt-2 w-100 btn-warning ">
+                                <CiText /> Add Text box
+                            </button>
+                        </div>
 
+                        <hr className='text-light' />
+                        <div className=" px-2 d-flex flex-column">
+                            <button onClick={() => handleClickOnAddTextBox("heading")} className="btn  rounded btn-outline border-dark-bg font-dark-bg my-1 fs-1 fw-bold text-capitalize">Heading</button>
+                            <button onClick={() => handleClickOnAddTextBox("subHeading")} className="btn  rounded btn-outline border-dark-bg font-dark-bg my-1 fs-3 fw-bold  text-capitalize">Sub Heading</button>
+                            <button onClick={() => handleClickOnAddTextBox("paragraph")} className="btn  rounded btn-outline border-dark-bg font-dark-bg my-1 fs-6 text-capitalize">Paragraph</button>
+                        </div>
+
+                    </div>
+                </div>
+            </>}
         </div>
     )
 }

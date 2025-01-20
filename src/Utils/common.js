@@ -156,3 +156,32 @@ export const convertPaletteToFabricGradientV2 = (object, colorObject) => {
 
     return gradient;
 };
+export const googleFonts = [
+    "Roboto", "Open Sans", "Lato", "Montserrat", "Poppins", "Source Sans Pro",
+    "Roboto Slab", "Playfair Display", "Nunito", "Merriweather", "Raleway",
+    "Ubuntu", "PT Sans", "PT Serif", "Oswald", "Work Sans", "Noto Sans",
+    "Noto Serif", "Inter", "Quicksand", "Karla", "Manrope", "IBM Plex Sans",
+    "Space Grotesk", "Space Mono", "Heebo", "Asap", "Barlow", "Fira Sans",
+    "Overpass", "Cabin", "Josefin Sans", "Varela Round", "Crimson Pro",
+    "Arvo", "Mukta", "Titillium Web", "Dosis", "Cairo", "Mulish", "Libre Baskerville",
+    "Bebas Neue", "Anton", "Zilla Slab", "Spectral", "DM Sans", "DM Serif Display",
+    "Lexend", "Chivo", "Hind", "Epilogue", "Teko", "Monda", "Exo 2", "Prompt",
+    "Rufina", "ABeeZee", "Fjalla One", "Lora", "Cardo", "Amatic SC", "Dancing Script",
+    "Shadows Into Light", "Indie Flower", "Cookie", "Pacifico", "Caveat", "Baloo 2",
+    "Sarabun", "Alfa Slab One", "Archivo", "Vollkorn", "Cinzel", "Alegreya",
+    "Alegreya Sans", "Comfortaa", "Signika", "Signika Negative", "Libre Franklin",
+    "Kanit", "Rubik", "Encode Sans", "Bitter", "Quattrocento", "Play",
+    "Nanum Gothic", "Nanum Myeongjo", "Gothic A1", "Great Vibes", "Parisienne",
+    "Courgette", "Sacramento", "Gloria Hallelujah", "Fredoka One", "Expletus Sans",
+    "Patua One", "Abril Fatface", "Cormorant Garamond", "Cormorant Infant",
+    "El Messiri", "Piazzolla", "Aref Ruqaa", "Literata", "Archivo Narrow"
+];
+export const filterFonts = (data) => {
+    const filteredFonts = data && googleFonts.map(fontName => data.filter(fontFamily => fontFamily.family === fontName)[0])
+    const newValueFonts = filteredFonts.filter(item => !!item).sort((fmA, fmB) => {
+        if (fmA.family.toUpperCase() > fmB.family.toUpperCase()) return 1
+        if (fmA.family.toUpperCase() < fmB.family.toUpperCase()) return -1
+        return 0
+    })
+    return newValueFonts
+}

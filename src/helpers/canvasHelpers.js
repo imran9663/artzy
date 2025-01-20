@@ -1,3 +1,8 @@
+
+import * as fabric from 'fabric'
+
+
+
 export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight) => {
     // Set the original dimensions for export
     const parent = document.getElementById(parentID);
@@ -11,8 +16,7 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
 
     const scaleWidth = viewportWidth / originalWidth;
     const scaleHeight = viewportHeight / originalHeight;
-    const scaleFactor = Math.min(scaleWidth, scaleHeight);
-
+    const scaleFactor = (Math.min(scaleWidth, scaleHeight));
     const scaledWidth = originalWidth * scaleFactor;
     const scaledHeight = originalHeight * scaleFactor;
 
@@ -20,13 +24,20 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
     propCanvas.setWidth(scaledWidth);
     propCanvas.setHeight(scaledHeight);
     propCanvas.setZoom(scaleFactor);
-
+    // const line = new fabric.Line([0, originalHeight / 2, originalWidth, originalHeight / 2], {
+    //     stroke: "red",
+    //     selectable: false
+    // });
+    // propCanvas.add(line)
+    // const line2 = new fabric.Line([originalWidth / 2, 0, originalWidth / 2, originalHeight], {
+    //     stroke: "blue",
+    //     selectable: false
+    // });
+    // propCanvas.add(line2)
     propCanvas.renderAll()
     return propCanvas
 };
 export function enableScaleOnScroll (divId) {
-    console.log("divId", divId);
-
     const element = document.getElementById(divId);
 
     if (!element) {
@@ -102,3 +113,87 @@ export const generatePolygonPoints = (sides, radius) => {
     }
     return points;
 };
+export const createBlobWithImage = (canvas, imageUrl) => {
+    const objWidth = 150;
+    const objHeight = 150;
+    const objScaleX = 1;
+    const objScaleY = 1;
+    const zoom = canvas.getZoom();
+    const scaledWidth = objWidth * objScaleX
+    const scaledHeight = objHeight * objScaleY
+    const canvasWidth = canvas.getWidth() / zoom;
+    const canvasHeight = canvas.getHeight() / zoom;
+
+    const imageElement = document.createElement("img");
+    imageElement.src = imageUrl;
+    imageElement.crossOrigin = "anonymous";
+
+    imageElement.onload = () => {
+        const imgW = imageElement.width;
+        const imgH = imageElement.height;
+        const canvasW = canvas.getWidth();
+        const canvasH = canvas.getHeight();
+        const scale = Math.min(100 / imgW, canvasH / imgH);
+        canvas.renderAll();
+        // console.log("ImageOptions", {
+        //     left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
+        //     top: Math.abs((canvasW - (imgH * scale)) / 2),
+        //     width: (imgW * scale),// Center vertically
+        //     height: (imgH * scale)
+        // });
+        const blobPath = `
+    M 150 50
+    C 200 30, 250 80, 200 150
+    C 150 220, 50 200, 60 150
+    C 70 100, 100 70, 150 50
+    Z
+  `;
+        const blob = new fabric.Path(blobPath, {
+            left: (canvasWidth / 2) - ((scaledWidth) / 2),
+            top: (canvasHeight / 2) - (scaledHeight / 2),
+            scaleX: 1, // Scale the blob if needed
+            scaleY: 1,
+            fill: "transparent", // No fill for the blob itself
+            stroke: "#000000", // No fill for the blob itself
+            strokeWidth: 1, // No fill for the blob itself
+        });
+        console.log('blob', blob);
+        blob.set({
+            width: 520,
+            height: 520
+        })
+
+
+        const blobW = blob.width;
+        const blobH = blob.height;
+
+        const fabricImage = new fabric.FabricImage(imageElement, {
+            left: Math.abs((blobW - (imgW * scale)) / 2), // Center horizontally
+            top: Math.abs((blobH - (imgH * scale)) / 2),
+            scaleX: (scale),// Center vertically
+            scaleY: (scale),
+            clipPath: blob
+
+        });
+        canvas.add(blob);
+        canvas.add(fabricImage);
+        canvas.renderAll();
+    };
+};
+export const bringObjToCenter = (canvas, selectedObject) => {
+    const objWidth = selectedObject.width;
+    const objHeight = selectedObject.height;
+    const objScaleX = selectedObject.scaleX;
+    const objScaleY = selectedObject.scaleY;
+    const zoom = canvas.getZoom();
+    const scaledWidth = objWidth * objScaleX
+    const scaledHeight = objHeight * objScaleY
+    const canvasWidth = canvas.getWidth() / zoom;
+    const canvasHeight = canvas.getHeight() / zoom;
+    selectedObject.set({
+        left: (canvasWidth / 2) - ((scaledWidth) / 2),
+        top: (canvasHeight / 2) - (scaledHeight / 2)
+    });
+    canvas.add(selectedObject);
+    canvas.renderAll()
+}

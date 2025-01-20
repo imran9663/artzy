@@ -13,10 +13,9 @@ import Settings from "../Settings/Setting";
 import "./style.css";
 import Footer from "../Footer";
 import { TbChevronsLeft, TbChevronsRight } from "react-icons/tb";
+import { filterFonts } from "../../Utils/common";
+import axios from "axios";
 const MainCanvas = (props) => {
-
-// const width = 1080 / 2;
-// const height = 1080 / 2;
     const canvasRef = useRef(null);
     const stageRef = useRef(null);
     const [canvas, setCanvas] = useState(null);
@@ -35,7 +34,35 @@ const MainCanvas = (props) => {
     const [showSettingsPanel, setShowSettingsPanel] = useState(false);
 
 
+    useEffect(() => {
+        const fetchFonts = async () => {
+            const googleApiKeys = process.env.REACT_APP_GOOGLE_FONTS_API_KEY;
+            try {
+                const response = await axios.get(
+                    `https://www.googleapis.com/webfonts/v1/webfonts?key=${googleApiKeys}`
+                );
+                if (response.status === 200) {
+                    const filteredFonts = filterFonts(response.data.items);
+                    filteredFonts.forEach((font) => loadFont(font.family));
+                }
 
+            } catch (error) {
+                console.error("Error fetching Google Fonts:", error);
+            }
+        };
+        fetchFonts();
+    }, []);
+
+
+    const loadFont = (font) => {
+        const fontLink = document.createElement("link");
+        fontLink.href = `https://fonts.googleapis.com/css2?family=${font.replace(
+            " ",
+            "+"
+        )}:wght@400;700&display=swap`;
+        fontLink.rel = "stylesheet";
+        document.head.appendChild(fontLink);
+    };
     useEffect(() => {
         if (canvasRef.current) {
             const initCanvas = new Canvas(canvasRef.current);
@@ -48,7 +75,7 @@ const MainCanvas = (props) => {
                 setShowSettingsPanel(false)
             });
             initCanvas.on("object:moving", (event) => {
-                handleObjectMoving(initCanvas, event.target, guideLines, setGuideLines);
+                handleObjectMoving(initCanvas, event.target, guideLines, setGuideLines, canvasSize);
             });
             initCanvas.on("object:modified", () => {
                 clearGuideLines(initCanvas, guideLines, setGuideLines);
