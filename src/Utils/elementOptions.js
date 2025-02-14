@@ -161,9 +161,9 @@ export const textOptions = {
 };
 
 export const elementStylesWhenSelected = {
-  borderColor: "#ffb703",
+  borderColor: "#8338ec",
   cornerColor: "transparent",
-  cornerStrokeColor: "#ffb703",
+  cornerStrokeColor: "#8338ec",
   cornerSize: 10,
   cornerStyle: "circle",
   transparentCorners: false,

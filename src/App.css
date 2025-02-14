@@ -49,7 +49,14 @@ font-size: 0.5rem;
 .border-dark-bg{
    border-color: #929292 !important;
 }
-
+.border-outline-none,.border-outline-none:focus,.border-outline-none:focus-within{
+  border: none;
+outline: none;
+box-shadow: none;
+}
+.bg-transparent{
+  background: transparent !important;
+}
   .input-number-type[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 
