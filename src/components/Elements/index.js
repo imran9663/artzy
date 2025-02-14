@@ -4,23 +4,31 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { LuShapes } from 'react-icons/lu';
 import * as Tb from 'react-icons/tb';
 import * as Icons from '../../Assets/Icons';
-import { bringObjToCenter, createBlobWithImage, createStar, generatePolygonPoints } from '../../helpers/canvasHelpers';
-import { generateRandomHex } from '../../Utils/common';
+import { bringObjToCenter, createBlobWithImage, createStar, generatePolygonPoints, handleImageToCanvas } from '../../helpers/canvasHelpers';
+import { generateRandomHex, rgbOrRgbaToHex } from '../../Utils/common';
 import { elementShapes } from '../../Utils/Constants';
 import './styles.css';
 import { CiText } from 'react-icons/ci';
 import { handleObjectMoving } from '../../helpers/snappingHelper';
+import { getIconFromApi } from '../../apis';
+import ColorCodeInput from '../UtilComponents/ColorCodeInput/Index';
+import ColorPicker from 'react-best-gradient-color-picker';
 const Elements = ({ canvas }) => {
-    const [imageOptionsTabKey, setImageOptionsTabKey] = useState("local");
-    const [defaultFill] = useState(generateRandomHex())
-    const [localAssets, setLocalAssets] = useState([]);
-    const [guideLines, setGuideLines] = useState([]);
-    const [sidebarOptions, setSideBarOptions] = useState({
+    const initSideBarState = {
         elements: false,
         image: false,
         text: false,
-    })
-
+        vector: false,
+        background: false,
+    }
+    const [imageOptionsTabKey, setImageOptionsTabKey] = useState("local");
+    const [iconSearch, setIconSearch] = useState('')
+    const [iconsData, setIconsData] = useState([])
+    const [defaultFill] = useState(generateRandomHex())
+    const [localAssets, setLocalAssets] = useState([]);
+    const [guideLines, setGuideLines] = useState([]);
+    const [sidebarOptions, setSideBarOptions] = useState(initSideBarState)
+    const [bgColor, setbgColor] = useState('#ffffff')
     const handleElementBtnClick = (shape) => {
 
         if (canvas) {
@@ -501,55 +509,20 @@ const Elements = ({ canvas }) => {
         }
         input.click()
     };
-    function handleImageToCanvas (imageUrl) {
-        // Ensure the canvas object is initialized
-        if (!canvas || !imageUrl) {
-            console.error("Canvas or Image URL is missing.");
-            return;
-        }
 
-        // Add the image to the canvas
-
-        const imageElement = document.createElement("img");
-        imageElement.src = imageUrl;
-        imageElement.crossOrigin = "anonymous";
-
-        imageElement.onload = () => {
-            const imgW = imageElement.width;
-            const imgH = imageElement.height;
-            const canvasW = canvas.getWidth();
-            const canvasH = canvas.getHeight();
-            const scale = Math.min(canvasW / imgW, canvasH / imgH);
-            canvas.renderAll();
-            // console.log("ImageOptions", {
-            //     left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
-            //     top: Math.abs((canvasW - (imgH * scale)) / 2),
-            //     width: (imgW * scale),// Center vertically
-            //     height: (imgH * scale)
-            // });
-
-            const fabricImage = new fabric.FabricImage(imageElement, {
-                left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
-                top: Math.abs((canvasW - (imgH * scale)) / 2),
-                scaleX: (scale),// Center vertically
-                scaleY: (scale)
-
-            });
-            canvas.add(fabricImage);
-            canvas.renderAll();
-        };
-    }
     const handleSideBarClick = (id = 'none') => {
         setSideBarOptions({
             elements: id === "elements" ? !sidebarOptions[id] : false,
             image: id === "image" ? !sidebarOptions[id] : false,
             text: id === "text" ? !sidebarOptions[id] : false,
+            vector: id === "vector" ? !sidebarOptions[id] : false,
+            background: id === "background" ? !sidebarOptions[id] : false,
         });
 
     }
-    // useEffect(() => {
-    //     console.log("localAssets", localAssets);
-    // }, [localAssets])
+    useEffect(() => {
+        console.log("iconsData", iconsData);
+    }, [iconsData])
     const handleClickOnAddTextBox = (id = 'normal') => {
         if (canvas) {
             let fabricText = {}
@@ -593,6 +566,29 @@ const Elements = ({ canvas }) => {
             canvas.renderAll()
             canvas.setActiveObject(fabricText)
         }
+        setSideBarOptions(initSideBarState)
+    }
+
+    const handleIconSearchInput = (e) => {
+        const { value } = e.target;
+        setIconSearch(value);
+    }
+    const handleSearchClick = async () => {
+        const res = await getIconFromApi(iconSearch);
+        if (res.status === 200) {
+            console.log("data", res?.data?.hits);
+            setIconsData(res?.data?.hits)
+        }
+
+
+    }
+    const handleBgColorChange = (color) => {
+        const hexColor = rgbOrRgbaToHex(color)
+        setbgColor(hexColor);
+        canvas.set({
+            backgroundColor: hexColor
+        })
+        canvas.renderAll()
     }
     return (
         <div className="elements-wrapper">
@@ -613,6 +609,12 @@ const Elements = ({ canvas }) => {
                     <Tb.TbTypography />
                 </button>
                 <button
+                    onClick={() => handleSideBarClick('vector')}
+                    className={`elementBtn`}
+                >
+                    <Tb.TbVector />
+                </button>
+                <button
                     id={"IMAGE"}
                     // onMouseOver={() => handleSideBarClick('image')}
                     onClick={() => handleSideBarClick('image')}
@@ -630,11 +632,14 @@ const Elements = ({ canvas }) => {
                     <Tb.TbPencilBolt />
                 </button>
                 <button
-                    onClick={() => createBlobWithImage(canvas, "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844226_960_720.png")}
+                    onClick={() => handleSideBarClick('background')}
+
+                    // onClick={() => createBlobWithImage(canvas, "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844226_960_720.png")}
                     className={`elementBtn`}
                 >
                     <Tb.TbBackground />
                 </button>
+
             </div>
             {sidebarOptions.elements && <div className="card imageOptionsCard bg-dark">
                 <div className="shape-elements">
@@ -677,7 +682,7 @@ const Elements = ({ canvas }) => {
                                     <div className="localUploads-list d-flex flex-row flex-wrap justify-content-around gap-1">
                                         {localAssets.map((image) => (
                                             <button
-                                                onClick={() => handleImageToCanvas(image.src)}
+                                                onClick={() => handleImageToCanvas(canvas, image.src)}
                                                 className="btn p-0"
                                             >
                                                 <img
@@ -716,6 +721,50 @@ const Elements = ({ canvas }) => {
                     </div>
                 </div>
             </>}
+            {sidebarOptions.vector && (
+                <>
+                    <div className="card imageOptionsCard bg-light">
+                        <div style={{ overflowY: "scroll" }} className="shape-elements ">
+                            <div className="px-2">
+                                <div className="my-1 d-flex flex-row border  rounded">
+                                    <input onChange={handleIconSearchInput} type="text" className="form-control border-outline-none bg-transparent" placeholder="search vectors" />
+                                    <button disabled={iconSearch === ''} onClick={handleSearchClick} className="btn  border-outline-none border-start ">
+                                        <Tb.TbSearch />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <hr className='text-dark my-1 ' />
+                            <div style={{ columnWidth: "100px" }} className="icons-display-wrapper ">
+                                {iconsData.length > 0 && iconsData.map(icon => <button onClick={() => handleImageToCanvas(canvas, icon.largeImageURL)} className="btn p-0 m-0"> <img style={{ width: '100%' }} key={icon.id} src={icon.previewURL} className=" rounded m-1" alt={icon.user} /></button>
+                                )}
+                            </div>
+
+                        </div>
+                    </div>
+                </>
+            )}
+            {sidebarOptions.background &&
+                <>
+                    <div className="card imageOptionsCard bg-light">
+                        <div className="shape-elements ">
+
+
+
+                            <div className="m-2">
+                                <ColorPicker
+                                    width={220}
+                                    disableDarkMode
+                                    value={bgColor}
+                                    onChange={handleBgColorChange}
+                                    hideColorTypeBtns={true}
+                                />
+
+                            </div>
+                        </div>
+                    </div>
+                </>
+            }
         </div>
     )
 }

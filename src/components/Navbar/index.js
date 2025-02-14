@@ -4,12 +4,14 @@ import logo from '../../Assets/Images/android-icon-72x72.png'
 import * as Tb from 'react-icons/tb';
 import { Dropdown } from 'react-bootstrap';
 import NewInputField from '../UtilComponents/NewInputField/Index';
+import { setupCanvas } from '../../helpers/canvasHelpers';
 
 const NavBar = ({ canvas }) => {
     const [canvasSize, setCanvasSize] = useState({
         width: 540,
         height: 540,
     });
+    const [fileName, setFileName] = useState(`File_${new Date().toJSON()}`)
     const handleSaveBtnClick = () => {
         const saveTo = canvas.toJSON();
         console.log("saveTo", saveTo);
@@ -43,14 +45,19 @@ const NavBar = ({ canvas }) => {
             }
         }
     }
+    const handleChangeName = (e) => {
+        const { value } = e.target;
+        setFileName(value)
+    }
 
 
 
     const handleSizeChange = (e) => {
         const { value, id } = e.target;
-        setCanvasSize({ ...canvasSize, [id]: value })
+        setCanvasSize({ ...canvasSize, [id]: Number(value) })
     }
     const handleResizeClick = () => {
+        setupCanvas(canvas, 'canvasStage', canvasSize.width, canvasSize.height)
         // const parentElement = document.getElementById("canvasStage");
         // const newWidth = parentElement.offsetWidth;
         // const newHeight = parentElement.offsetHeight;
@@ -90,9 +97,13 @@ const NavBar = ({ canvas }) => {
     };
     return (
         <nav className="navbar navbar-expand-sm navbar-dark logo-navbar">
-            <div className="logo-wrapper">
+            <div className="logo-wrapper d-flex flex-row align-items-center gap-4">
                 <img src={logo} alt className="img-fluid " />
+                <div className="file_name_wrapper">
+                    <NewInputField style={{ width: "15rem" }} id="file_name" value={fileName} handleChange={handleChangeName} />
+                </div>
             </div>
+
             <div className="d-flex flex-row gap-2">
                 <button type="button" disabled className="btn btn-dark btn-sm border ">
                     <Tb.TbArrowBackUp />
@@ -132,7 +143,7 @@ const NavBar = ({ canvas }) => {
                 <button onClick={handleSaveBtnClick} type="button" className="btn btn-dark btn-sm border border-warning">
                     <Tb.TbDeviceFloppy />
                 </button>
-                <button onClick={() => downloadCanvas(canvas)} type="button" className="btn btn-dark btn-sm border border-warning">
+                <button onClick={() => downloadCanvas(canvas, 'png', fileName)} type="button" className="btn btn-dark btn-sm border border-warning">
                     <Tb.TbDownload />
                 </button>
             </div>

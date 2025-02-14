@@ -1,5 +1,6 @@
 
 import * as fabric from 'fabric'
+import { elementStylesWhenSelected } from '../Utils/elementOptions';
 
 
 
@@ -24,16 +25,7 @@ export const setupCanvas = (propCanvas, parentID, originalWidth, originalHeight)
     propCanvas.setWidth(scaledWidth);
     propCanvas.setHeight(scaledHeight);
     propCanvas.setZoom(scaleFactor);
-    // const line = new fabric.Line([0, originalHeight / 2, originalWidth, originalHeight / 2], {
-    //     stroke: "red",
-    //     selectable: false
-    // });
-    // propCanvas.add(line)
-    // const line2 = new fabric.Line([originalWidth / 2, 0, originalWidth / 2, originalHeight], {
-    //     stroke: "blue",
-    //     selectable: false
-    // });
-    // propCanvas.add(line2)
+    propCanvas.set({ ...elementStylesWhenSelected })
     propCanvas.renderAll()
     return propCanvas
 };
@@ -196,4 +188,37 @@ export const bringObjToCenter = (canvas, selectedObject) => {
     });
     canvas.add(selectedObject);
     canvas.renderAll()
+}
+
+export function handleImageToCanvas (canvas, imageUrl) {
+    // Ensure the canvas object is initialized
+    if (!canvas || !imageUrl) {
+        console.error("Canvas or Image URL is missing.");
+        return;
+    }
+
+    // Add the image to the canvas
+
+    const imageElement = document.createElement("img");
+    imageElement.src = imageUrl;
+    imageElement.crossOrigin = "anonymous";
+
+    imageElement.onload = () => {
+        const imgW = imageElement.width;
+        const imgH = imageElement.height;
+        const canvasW = canvas.getWidth();
+        const canvasH = canvas.getHeight();
+        const scale = Math.min(canvasW / imgW, canvasH / imgH);
+
+
+
+        const fabricImage = new fabric.FabricImage(imageElement, {
+            // left: Math.abs((canvasW - (imgW * scale)) / 2), // Center horizontally
+            // top: Math.abs((canvasW - (imgH * scale)) / 2),
+            scaleX: (scale),// Center vertically
+            scaleY: (scale)
+
+        });
+        bringObjToCenter(canvas, fabricImage)
+    };
 }
