@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.css';
 import logo from '../../Assets/Images/android-icon-72x72.png'
 import * as Tb from 'react-icons/tb';
@@ -11,7 +11,26 @@ const NavBar = ({ canvas }) => {
         width: 540,
         height: 540,
     });
-    const [fileName, setFileName] = useState(`File_${new Date().toJSON()}`)
+    const [fileName, setFileName] = useState(`File_Artzy_${new Date().toJSON()}`);
+    const [undoRedoStack, setUndoRedoStack] = useState({
+        state: [],
+        maxIndex: 5,
+        minInd: 0
+    });
+    useEffect(() => {
+        let newState = []
+        let maxInd = undoRedoStack.maxIndex
+        if (undoRedoStack.minInd < undoRedoStack.maxIndex) {
+            maxInd--
+            newState.push(canvas);
+        } else if (undoRedoStack.minInd >= undoRedoStack.maxIndex) {
+            newState.pop();
+            newState.push(canvas)
+        }
+        setUndoRedoStack({ ...undoRedoStack, state: canvas, maxIndex: maxInd })
+    }, [canvas])
+
+
     const handleSaveBtnClick = () => {
         const saveTo = canvas.toJSON();
         console.log("saveTo", saveTo);
@@ -49,21 +68,12 @@ const NavBar = ({ canvas }) => {
         const { value } = e.target;
         setFileName(value)
     }
-
-
-
     const handleSizeChange = (e) => {
         const { value, id } = e.target;
         setCanvasSize({ ...canvasSize, [id]: Number(value) })
     }
     const handleResizeClick = () => {
         setupCanvas(canvas, 'canvasStage', canvasSize.width, canvasSize.height)
-        // const parentElement = document.getElementById("canvasStage");
-        // const newWidth = parentElement.offsetWidth;
-        // const newHeight = parentElement.offsetHeight;
-
-        // canvas.setDimensions({ width: newWidth, height: newHeight });
-        // canvas.renderAll()
     }
     const downloadCanvas = (canvas, format = 'svg', filename = 'canvas') => {
         if (!canvas) return;
@@ -95,6 +105,12 @@ const NavBar = ({ canvas }) => {
         link.download = `${filename}.${format}`;
         link.click();
     };
+    const handleUndo = () => {
+        canvas.undo()
+    }
+    const handleRedo = () => {
+        canvas.redo()
+    }
     return (
         <nav className="navbar navbar-expand-sm navbar-dark logo-navbar">
             <div className="logo-wrapper d-flex flex-row align-items-center gap-4">
@@ -105,10 +121,10 @@ const NavBar = ({ canvas }) => {
             </div>
 
             <div className="d-flex flex-row gap-2">
-                <button type="button" disabled className="btn btn-dark btn-sm border ">
+                <button onClick={handleUndo} type="button" className="btn btn-dark btn-sm border ">
                     <Tb.TbArrowBackUp />
                 </button>
-                <button type="button" disabled className="btn btn-dark btn-sm border ">
+                <button onClick={handleRedo} type="button" className="btn btn-dark btn-sm border ">
                     <Tb.TbArrowForwardUp />
                 </button>
                 <button type="button" onClick={handleDuplicateObject} className="btn btn-dark btn-sm border ">

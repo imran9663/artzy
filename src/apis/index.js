@@ -7,9 +7,9 @@ const axiosInstance = axios.create({
 })
 
 // axiosInstance.i
-export const getIconFromApi = async (searchParams) => {
+export const getIconFromApi = async (searchParams, type) => {
     const baseURL = `https://pixabay.com/api/?key=${pixabayApiKey}&q=`;
-    const url = `${searchParams.replace(' ', '+')}&image_type=vector`
+    const url = `${searchParams.replace(' ', '+')}&image_type={${type}}`
     let res;
     await axios.get(baseURL + url).then((result) => {
         res = { status: result.status, data: result.data }

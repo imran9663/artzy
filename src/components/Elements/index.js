@@ -573,8 +573,8 @@ const Elements = ({ canvas }) => {
         const { value } = e.target;
         setIconSearch(value);
     }
-    const handleSearchClick = async () => {
-        const res = await getIconFromApi(iconSearch);
+    const handleSearchClick = async (type) => {
+        const res = await getIconFromApi(iconSearch, type);
         if (res.status === 200) {
             console.log("data", res?.data?.hits);
             setIconsData(res?.data?.hits)
@@ -697,7 +697,27 @@ const Elements = ({ canvas }) => {
                             </div>
                         </Tab>
                         <Tab eventKey="online" title="Online">
-                            Tab content for Profile
+                            <>
+                                <div className="card imageOptionsCard bg-light">
+                                    <div style={{ overflowY: "scroll" }} className="shape-elements ">
+                                        <div className="px-2">
+                                            <div className="my-1 d-flex flex-row border  rounded">
+                                                <input onChange={handleIconSearchInput} type="text" className="form-control border-outline-none bg-transparent" placeholder="search vectors" />
+                                                <button disabled={iconSearch === ''} onClick={() => handleSearchClick('photo')} className="btn  border-outline-none border-start ">
+                                                    <Tb.TbSearch />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <hr className='text-dark my-1 ' />
+                                        <div style={{ columnWidth: "100px" }} className="icons-display-wrapper ">
+                                            {iconsData.length > 0 && iconsData.map(icon => <button onClick={() => handleImageToCanvas(canvas, icon.largeImageURL)} className="btn p-0 m-0"> <img style={{ width: '100%' }} key={icon.id} src={icon.previewURL} className=" rounded m-1" alt={icon.user} /></button>
+                                            )}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </>
                         </Tab>
                     </Tabs>
                 </div>
@@ -728,7 +748,7 @@ const Elements = ({ canvas }) => {
                             <div className="px-2">
                                 <div className="my-1 d-flex flex-row border  rounded">
                                     <input onChange={handleIconSearchInput} type="text" className="form-control border-outline-none bg-transparent" placeholder="search vectors" />
-                                    <button disabled={iconSearch === ''} onClick={handleSearchClick} className="btn  border-outline-none border-start ">
+                                    <button disabled={iconSearch === ''} onClick={() => handleSearchClick('vector')} className="btn  border-outline-none border-start ">
                                         <Tb.TbSearch />
                                     </button>
                                 </div>
